@@ -1,67 +1,82 @@
 """
-A parser gets created by a Page object, is given the text its supposed
-to format and an HTTPRequest object. It mucks around with the text,
-and writes the result to the HTTPRequest object it was given. 
+PGN Chess Illustrator for MoinMoin (Chess.py)
+Justin Cassidy, November 2014
 
-To install:
-
-Copy this file into data/plugins/parser in your moinmoin wiki instance.
-Restart the wiki if necessary.
-Edit a page and type in
-
-{{{#!Chess Game-Name 
-PGN / FEN notation, or just a new move
-}}}
-
-The result should be a chessboard matching the game state.
-
-The way the chess games are tracked across multiple tags is with a
-cache object. Each {{{#!Chess Game-Name }}} tag gets a cache object
-named "(pagename)-(Game-Name)". The first chess tag should have the
-cumulative game state, and then future tags should be either valid
-moves or game resets of the initial state.
+Installation
+------------
+Copy this file into data/plugins/parser in your MoinMoin wiki instance.
+Restart the wiki if necessary. The name of this file must match the type
+of tag in the wiki (Chess.py => {{{#!Chess ... }}}
 
 
+Usage
+-----
+To insert a game into a wiki page, use a "Game" tag. Ideally the PGN is as 
+simple as possible, all on one line.
+{{{#!Chess Game Match-ID Raw-PGN }}}
 
+By default, this just caches a copy of your game on the Wiki server, and
+nothing outputs into the wiki page. To annotate and discuss your game with 
+example boards, use a "Board" tag:
+{{{#!Chess Board Match-ID 23-White }}}   <-- Show White's 23rd move
+{{{#!Chess Board Match-ID 8-Black }}}    <-- Show Black's 8th move
+
+Each time the chessboard is printed, the move being shown appears in a
+drop-down widget, with the current move illustrated being shown. The entire
+history of the game can be cycled through in each widget, though the move
+being illustrated will be shown by default.
 """
 
 
 from MoinMoin import wikiutil
 from MoinMoin.parser import wiki
 from MoinMoin import caching
+import chess.pgn
 
 
 class Parser:
     """ Insert chess boards into the MoinMoin wiki and write about chess games"""
-    
     def __init__(self, raw, request, **kw):
-        # 'init' is called once for each !# command but it doesnt do much.
-        # Most of the work usually happens in the 'format' method.
-
         self.raw = raw
         # raw is the text inbetween the {{{ and }}} thingies. 
-        # most parsers generally save it for use in the 'format'
-        # method. 
         
         self.request = request
         # request is the HTTPRequest object
-        # parsers generally save this during '__init__' for use later
-        # on in 'format'. They have to write to it in fact to get
-        # any results. 
 
         self.kw=kw
-        # kw is is a dictionary with 'arguments' to the !# command.
         # for example: {{{!# HelloWorld a b c }}}
-        # would give the following value for kw:
         # {'format_args': 'a b c '}
 
-	# TODO: define the input formats here valid for python chess
-	# Parse the argument text with python-chess
-	# once we say we have a valid board, create the HTML board format
+	# The board can be constructed empty-form, or from a list of moves.
+	# The moves may be in PGN format, readable by chess.pgn
+	inputs = self.kw['format_args'].split(' ')
+	name = inputs[0]
+	mode = inputs[1]	# Either "Game" or "Board"
+	board = inputs[2]	# In a "Board" tag, what move to display
+	action = inputs[2:]	# In a "Game" tag, the list of moves
 
-	# If the board is valid format, create a new cache file and store the game's state
-	# to that cache file for later use. Construct a HTML chess board in the cache, and
-	# for future page loads we can just grab this chess board and stick it into the page
+
+	# Game tags:
+	# If the name of the game exists, read a cachefile. Otherwise, create a
+	# new one, containing the PGN of the game.
+
+
+
+	# Board tags:
+	# TODO: determine how to draw boards in such a way that a drop-down menu
+	# can control the output of the chessboard next to it. Need a performant
+	# way to switch between multiple board divs, each of which contain 64
+	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
+
+
+	try {
+	   board = chess.Bitboard(kw['format_args'])
+	} except {
+	   
+
+
+
+
 
     def format(self, formatter):
         #n format is also called for each !# command. its called after __init__
@@ -93,5 +108,3 @@ class Parser:
         self.request.write(formatter.text("hello world end"))
         self.request.write(formatter.paragraph(1))
         self.request.write(formatter.paragraph(0))
-
-        # the end
