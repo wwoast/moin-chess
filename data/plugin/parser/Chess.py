@@ -44,17 +44,18 @@ MAX_MOVES = 300		# Longest recorded game is 269 moves
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
     def __init__(self, raw, request, **kw):
-        self.raw = raw           # text on each line inbetween the {{{ and }}}
+        self.raw = raw           # words on each line inbetween the {{{ and }}}
         self.request = request   # request is the HTTPRequest object
         self.kw = kw             # for example: {{{!# HelloWorld a b c ...
-                                 # {'format_args': 'a b c '}	self.error = ""          # Error message to print if necessary        
+                                 # {'format_args': 'a b c '}	
+	self.error = ""          # Error message to print if necessary        
 	self.game = ""           # The PGN chess game
 
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
-	inputs = self.kw['format_args'].split(' ')
-	self.name = inputs[0] + ".pgn"
-	self.mode = inputs[1]	# Either "Game" or "Board"
+	# self.inputs = self.kw['format_args']
+	self.mode = 'Game'
+	self.name = 'Test-Game'
 	# Initiate the Moin cache entry object
         # self.cache = CacheEntry(request, self.name)
 
@@ -78,11 +79,11 @@ class Parser:
 	      self.game = ' '.join(moves)
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
-	      if ( len(self.game) == 0 ):
-	         # self.cache.close()
-                 # self.cache.open('w')
-	         self.game = ' '.join(moves)
-	         # self.cache.write(self.game)
+	      # if ( len(self.game) == 0 ):
+	      #    self.cache.close()
+              #    self.cache.open('w')
+	      #    self.game = ' '.join(moves)
+	      #    self.cache.write(self.game)
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
@@ -102,28 +103,28 @@ class Parser:
 	# can control the output of the chessboard next to it. Need a performant
 	# way to switch between multiple board divs, each of which contain 64
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
-	elif ( self.mode == "Board" ):
-	   try:
+	# elif ( self.mode == "Board" ):
+	#   try:
 	      # self.cache.open('r')
 	      # self.game = cache.read()
-	      if ( len(self.game) == 0 ):
-	         self.error = "Cache error: Game not found: " + self.name
+	      # if ( len(self.game) == 0 ):
+	      #    self.error = "Cache error: Game not found: " + self.name
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
-	   finally:
-	      pass
+	#   finally:
+	 #     pass
 	      # self.cache.close()
 
 	else:
-	   self.error = "Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}"	   
+	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
 
     def format(self, formatter):
 	# TODO: Write the exact style and board code
 	# from MoinMoin import formatter <<- has the methods we can use here  
         self.request.write(formatter.paragraph(0))
         self.request.write(formatter.text('pgn: ' + self.game))
-        self.request.write(formatter.paragraph(0))
+        self.request.write(formatter.paragraph(1))
         self.request.write(formatter.text('error: ' + self.error))
-        self.request.write(formatter.paragraph(0))
-        self.request.write(formatter.text('mode: ' + self.mode))
+        self.request.write(formatter.paragraph(2))
+        self.request.write(formatter.text('mode: ' + self.mode ))
