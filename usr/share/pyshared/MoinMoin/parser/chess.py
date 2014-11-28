@@ -33,32 +33,59 @@ from MoinMoin.parser import wiki
 from MoinMoin import caching
 import chess.pgn
 
+MAX_MOVES = 300		# Longest recorded game is 269 moves
 
 class Parser:
-    """ Insert chess boards into the MoinMoin wiki and write about chess games"""
+    """Insert chess boards into MoinMoin and write about chess games"""
     def __init__(self, raw, request, **kw):
-        self.raw = raw
-        # raw is the text inbetween the {{{ and }}} thingies. 
-        
-        self.request = request
-        # request is the HTTPRequest object
-
-        self.kw=kw
-        # for example: {{{!# HelloWorld a b c }}}
-        # {'format_args': 'a b c '}
+        self.raw = raw           # text inbetween the {{{ and }}}
+        self.request = request   # request is the HTTPRequest object
+        self.kw=kw               # for example: {{{!# HelloWorld a b c }}}
+                                 # {'format_args': 'a b c '}
+	self.error = ""          # Error message to print if necessary        
+	self.game = ""           # The PGN chess game
 
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
 	inputs = self.kw['format_args'].split(' ')
-	name = inputs[0]
-	mode = inputs[1]	# Either "Game" or "Board"
-	board = inputs[2]	# In a "Board" tag, what move to display
-	action = inputs[2:]	# In a "Game" tag, the list of moves
-
+	self.name = inputs[0] + ".pgn"
+	self.mode = inputs[1]	# Either "Game" or "Board"
+	# Initiate the Moin cache entry object
+	self.cache = CacheEntry(request, self.name)
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
 	# new one, containing the PGN of the game.
+	if ( self.mode == "Game" ):
+           # In a "Game" tag, other values are PGN moves
+	   self.moves = inputs[2:MAX_MOVES]
+	   
+	   # Try to read from an existing cachefile
+	   # If cache read turns up empty, make a new one with the PGN
+	   # At the end, close the file
+	   try:
+              self.cache.open('r')
+	      self.game = cache.read()
+	      # TODO: If the cache already exists, verify moves are the same.
+	      # If they are, print an error message and the link to the page
+	      # where the game was first defined.
+
+	      # Game hasn't been defined yet. Write a PGN to the cache
+	      if ( len(self.game) == 0 ):
+	         self.cache.close()
+                 self.cache.open('w')
+	         self.cache.write(self.moves)
+	         self.game = self.moves
+
+	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
+
+	   except IOError as e:
+	      # File read silently fails in the caching object, but file write
+	      # could screw things up. Print error when this happens
+	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
+
+	   finally:
+	      self.cache.close()
 
 
 
@@ -67,44 +94,26 @@ class Parser:
 	# can control the output of the chessboard next to it. Need a performant
 	# way to switch between multiple board divs, each of which contain 64
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
+	elif ( self.mode == "Board" ):
+	   self.position = inputs[2]	# In a "Board" tag, what move to display	   
+	   try:
+	      self.cache.open('r')
+	      self.game = cache.read()
+	      if ( len(self.game) == 0 ):
+	         self.error = "Cache error: Game not found: " + self.name
 
+	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
-	try {
-	   board = chess.Bitboard(kw['format_args'])
-	} except {
-	   
+	   finally:
+	      self.cache.close()
 
-
-
+	else:
+	   self.error = "Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}"	   
 
 
     def format(self, formatter):
-        #n format is also called for each !# command. its called after __init__
-        # is called. this is where parsers do most of their work.
-        # they write their results into the Httprequest object
-        # which is usually stored from __init__ in self.request. 
-        
-        # print "formatter",dir(formatter)
-        # formatter is a special object in MoinMoin that
-        # is supposed to help people who write extensions to have
-        # sort of a uniform looking thing going on.
-        # see http://moinmoin.wikiwikiweb.de/ApplyingFormatters?highlight=%28formatter%29
-                
-        # but formatter is not documented well. you have to look at
-        # moinmoin/formatter/base.py. And if you do, you will see that half of
-        # the methods raise a 'not implemented' error.
-        # formatter is also being refactored alot so dont get used to it. 
-        # if all else fails just use formatter.rawHTML which will
-        # screw up XML output but at least it will work.
-
+	# TODO: Write the exact style and board code
 	# from MoinMoin import formatter <<- has the methods we can use here  
-        self.request.write(formatter.text("hello world begin"))
-        self.request.write(formatter.paragraph(1))
-        self.request.write(formatter.text('raw: ' + self.raw))
         self.request.write(formatter.paragraph(0))
-        self.request.write(formatter.paragraph(1))
-        self.request.write(formatter.text('kw:' + str(self.kw)))
-        self.request.write(formatter.paragraph(0))
-        self.request.write(formatter.text("hello world end"))
-        self.request.write(formatter.paragraph(1))
+        self.request.write(formatter.text('pgn: ' + self.game))
         self.request.write(formatter.paragraph(0))
