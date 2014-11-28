@@ -98,7 +98,7 @@ class Parser:
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
 	elif ( self.mode == "Board" ):
 	   try:
-	      self.cache.open('r')
+	      self.cache.open(mode='r')
 	      self.game = self.cache.read()
 
            except caching.CacheError as e:
