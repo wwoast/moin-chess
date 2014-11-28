@@ -36,8 +36,8 @@ being illustrated will be shown by default.
 
 from MoinMoin import wikiutil
 from MoinMoin.parser import wiki
-from MoinMoin import caching
-import chess.pgn
+# from MoinMoin import caching
+# import chess.pgn
 
 MAX_MOVES = 300		# Longest recorded game is 269 moves
 
@@ -47,8 +47,7 @@ class Parser:
         self.body = raw         # text on each line inbetween the {{{ and }}}
         self.request= request    # request is the HTTPRequest object
         self.kw=kw               # for example: {{{!# HelloWorld a b c ...
-                                 # {'format_args': 'a b c '}
-	self.error = ""          # Error message to print if necessary        
+                                 # {'format_args': 'a b c '}	self.error = ""          # Error message to print if necessary        
 	self.game = ""           # The PGN chess game
 
 	# The board can be constructed empty-form, or from a list of moves.
@@ -57,7 +56,7 @@ class Parser:
 	self.name = inputs[0] + ".pgn"
 	self.mode = inputs[1]	# Either "Game" or "Board"
 	# Initiate the Moin cache entry object
-	self.cache = CacheEntry(request, self.name)
+#	self.cache = CacheEntry(request, self.name)
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
@@ -71,18 +70,18 @@ class Parser:
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
 	   try:
-              self.cache.open('r')
-	      self.game = cache.read()
+#             self.cache.open('r')
+#	      self.game = cache.read()
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      if ( len(self.game) == 0 ):
-	         self.cache.close()
-                 self.cache.open('w')
-	         self.game = ' '.join(self.moves)
-	         self.cache.write(self.game)
+	         # self.cache.close()
+                 # self.cache.open('w')
+	         self.game = ' '.join(moves)
+	         # self.cache.write(self.game)
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
@@ -92,7 +91,8 @@ class Parser:
 	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
 
 	   finally:
-	      self.cache.close()
+	      pass
+	      # self.cache.close()
 
 
 
@@ -104,7 +104,7 @@ class Parser:
 	elif ( self.mode == "Board" ):
 	   self.position = self.body	# In a "Board" tag, what move to display	   
 	   try:
-	      self.cache.open('r')
+	      # self.cache.open('r')
 	      self.game = cache.read()
 	      if ( len(self.game) == 0 ):
 	         self.error = "Cache error: Game not found: " + self.name
@@ -112,7 +112,8 @@ class Parser:
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
 	   finally:
-	      self.cache.close()
+	      pass
+	      # self.cache.close()
 
 	else:
 	   self.error = "Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}"	   
