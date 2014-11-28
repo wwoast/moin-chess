@@ -34,9 +34,9 @@ being illustrated will be shown by default.
 """
 
 
-# from MoinMoin import wikiutil
-# from MoinMoin.parser import wiki
-# from MoinMoin import caching
+from MoinMoin import caching, wikiutil
+from MoinMoin.parser import text_moin_wiki
+import sys
 # import chess.pgn
 
 MAX_MOVES = 300		# Longest recorded game is 269 moves
@@ -57,7 +57,7 @@ class Parser:
 	self.mode = self.inputs[0]
 	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
-        self.cache = CacheEntry(request, self.name, self.name, scope='item')
+        self.cache = caching.CacheEntry(self.request, self.name, self.name, scope='wiki')
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
@@ -125,3 +125,5 @@ class Parser:
         self.request.write(formatter.text('error: ' + self.error))
         self.request.write(formatter.paragraph(2))
         self.request.write(formatter.text('mode: ' + self.mode ))
+        self.request.write(formatter.paragraph(3))
+        self.request.write(formatter.text('path: ' + str(sys.path) ))
