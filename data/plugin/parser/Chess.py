@@ -82,6 +82,7 @@ class Parser:
 	      self.error = "Cache error: %s" % e
               self.cache.open(mode='w')
 	      self.game = ' '.join(moves)
+	      # TODO: Check if the game is valid at (only!) this point!
 	      self.cache.write(self.game)
 
 	   except IOError as e:
@@ -112,11 +113,21 @@ class Parser:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
 
     def format(self, formatter):
-	# TODO: Write the exact style and board code
-	# from MoinMoin import formatter <<- has the methods we can use here  
-        self.request.write(formatter.paragraph(0))
-        self.request.write(formatter.text('pgn: ' + self.game))
-        self.request.write(formatter.paragraph(1))
-        self.request.write(formatter.text('error: ' + self.error))
-        self.request.write(formatter.paragraph(2))
-        self.request.write(formatter.text('mode: ' + self.mode ))
+	def printError(self):
+           self.request.write(formatter.paragraph(1))
+           self.request.write(formatter.preformatted(1))
+           self.request.write(formatter.preformatted(self.error))
+           self.request.write(formatter.preformatted(0))
+           self.request.write(formatter.paragraph(0))
+
+	def printBoard(self):
+           self.request.write(formatter.paragraph(1))
+           self.request.write(formatter.preformatted(1))
+           self.request.write(formatter.text(self.name + ': ' + self.game))
+           self.request.write(formatter.preformatted(0))
+           self.request.write(formatter.paragraph(0))
+
+	if ( self.error ):
+	   printError()
+	else:
+	   printBoard()
