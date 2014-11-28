@@ -53,9 +53,9 @@ class Parser:
 
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
-	# self.inputs = self.kw['format_args']
-	self.mode = 'Game'
-	self.name = 'Test-Game'
+	self.inputs = self.kw['format_args'].split(' ')
+	self.mode = self.inputs[0]
+	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
         # self.cache = CacheEntry(request, self.name)
 
@@ -73,10 +73,10 @@ class Parser:
 	   try:
               # self.cache.open('r')
               # self.game = cache.read()
+	      self.game = ' '.join(moves)
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
-	      self.game = ' '.join(moves)
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      # if ( len(self.game) == 0 ):
@@ -96,8 +96,6 @@ class Parser:
 	      pass
 	      # self.cache.close()
 
-
-
 	# Board tags:
 	# TODO: determine how to draw boards in such a way that a drop-down menu
 	# can control the output of the chessboard next to it. Need a performant
@@ -105,16 +103,15 @@ class Parser:
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
 	# elif ( self.mode == "Board" ):
 	#   try:
-	      # self.cache.open('r')
-	      # self.game = cache.read()
-	      # if ( len(self.game) == 0 ):
-	      #    self.error = "Cache error: Game not found: " + self.name
-
-	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
+	#      self.cache.open('r')
+	#      self.game = cache.read()
+	#      if ( len(self.game) == 0 ):
+	#         self.error = "Cache error: Game not found: " + self.name
+	       # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
 	#   finally:
-	 #     pass
-	      # self.cache.close()
+	#      pass
+	       # self.cache.close()
 
 	else:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
@@ -125,6 +122,6 @@ class Parser:
         self.request.write(formatter.paragraph(0))
         self.request.write(formatter.text('pgn: ' + self.game))
         self.request.write(formatter.paragraph(1))
-        self.request.write(formatter.text('error: ' + self.error))
-        self.request.write(formatter.paragraph(2))
         self.request.write(formatter.text('mode: ' + self.mode ))
+        self.request.write(formatter.paragraph(2))
+        self.request.write(formatter.text('error: ' + self.error))
