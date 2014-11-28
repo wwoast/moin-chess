@@ -57,7 +57,7 @@ class Parser:
 	self.mode = self.inputs[0]
 	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
-        # self.cache = CacheEntry(request, self.name)
+        self.cache = CacheEntry(request, self.name, self.name, scope='item')
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
@@ -93,8 +93,7 @@ class Parser:
 	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
 
 	   finally:
-	      pass
-	      # self.cache.close()
+	      self.cache.close()
 
 	# Board tags:
 	# TODO: determine how to draw boards in such a way that a drop-down menu
