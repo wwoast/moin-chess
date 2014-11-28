@@ -70,16 +70,17 @@ class Parser:
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
 	   try:
-              self.cache.open('r')
-              self.game = cache.read()
+              # self.cache.open(mode='r')
+              # self.game = cache.read()
+	      self.game = ' '.join(moves)
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      if ( len(self.game) == 0 ):
-	         self.cache.close()
-                 self.cache.open('w')
+	         # self.cache.close()
+                 # self.cache.open(mode='w')
 	         self.game = ' '.join(moves)
 	         self.cache.write(self.game)
 
