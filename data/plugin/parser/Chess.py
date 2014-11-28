@@ -53,9 +53,9 @@ class Parser:
 
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
-	# self.inputs = self.kw['format_args']
-	self.mode = 'Game'
-	self.name = 'Test-Game'
+	self.inputs = self.kw['format_args'].split(' ')
+	self.mode = self.inputs[0]
+	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
         # self.cache = CacheEntry(request, self.name)
 
@@ -73,38 +73,17 @@ class Parser:
 	   try:
               # self.cache.open('r')
               # self.game = cache.read()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	      self.game = ' '.join(moves)
->>>>>>> parent of eaca509... Basic cache management
-=======
-	      self.game = ' '.join(moves)
->>>>>>> parent of eaca509... Basic cache management
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
-	      self.game = ' '.join(moves)
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      # if ( len(self.game) == 0 ):
-<<<<<<< HEAD
-<<<<<<< HEAD
-	      #   self.cache.close()
-              #   self.cache.open('w')
-	      #   self.game = ' '.join(moves)
-	      #   self.cache.write(self.game)
-=======
-=======
->>>>>>> parent of eaca509... Basic cache management
 	      #    self.cache.close()
               #    self.cache.open('w')
 	      #    self.game = ' '.join(moves)
 	      #    self.cache.write(self.game)
-<<<<<<< HEAD
->>>>>>> parent of eaca509... Basic cache management
-=======
->>>>>>> parent of eaca509... Basic cache management
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
@@ -116,11 +95,6 @@ class Parser:
 	   finally:
 	      pass
 	      # self.cache.close()
-<<<<<<< HEAD
-
-
-=======
->>>>>>> parent of eaca509... Basic cache management
 
 	# Board tags:
 	# TODO: determine how to draw boards in such a way that a drop-down menu
