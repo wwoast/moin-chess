@@ -77,16 +77,16 @@ class Parser:
 	      # where the game was first defined.
 	      self.cache.close()
 
-	   except IOError as e:
-	      # Can't write files? Bad news!
-	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
-
            except caching.CacheError as e:
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      self.error = "Cache error: %s" % e
               self.cache.open(mode='w')
 	      self.game = ' '.join(moves)
 	      self.cache.write(self.game)
+
+	   except IOError as e:
+	      # Can't write files? Bad news!
+	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
 
 	   finally:
 	      self.cache.close()
@@ -96,17 +96,17 @@ class Parser:
 	# can control the output of the chessboard next to it. Need a performant
 	# way to switch between multiple board divs, each of which contain 64
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
-	# elif ( self.mode == "Board" ):
-	#   try:
-	      # self.cache.open('r')
-	      # self.game = cache.read()
-	      # if ( len(self.game) == 0 ):
-	      #    self.error = "Cache error: Game not found: " + self.name
+	elif ( self.mode == "Board" ):
+	   try:
+	      self.cache.open('r')
+	      self.game = self.cache.read()
 
-	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
+           except caching.CacheError as e:
+	      # Game hasn't been defined yet. For board references, print err
+	      self.error = "Tag error: No {{{#!Chess Game %s}}} defined." % self.name
 
-	#   finally:
-	      # self.cache.close()
+	   finally:
+	      self.cache.close()
 
 	else:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
