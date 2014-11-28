@@ -34,9 +34,9 @@ being illustrated will be shown by default.
 """
 
 
-# from MoinMoin import wikiutil
-# from MoinMoin.parser import wiki
-# from MoinMoin import caching
+from MoinMoin import wikiutil
+from MoinMoin.parser import wiki
+from MoinMoin import caching
 # import chess.pgn
 
 MAX_MOVES = 300		# Longest recorded game is 269 moves
@@ -57,7 +57,7 @@ class Parser:
 	self.mode = self.inputs[0]
 	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
-        # self.cache = CacheEntry(request, self.name)
+        self.cache = CacheEntry(request, self.name)
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
@@ -71,19 +71,18 @@ class Parser:
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
 	   try:
-              # self.cache.open('r')
-              # self.game = cache.read()
-	      self.game = ' '.join(moves)
+              self.cache.open('r')
+              self.game = cache.read()
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
-	      # if ( len(self.game) == 0 ):
-	      #    self.cache.close()
-              #    self.cache.open('w')
-	      #    self.game = ' '.join(moves)
-	      #    self.cache.write(self.game)
+	      if ( len(self.game) == 0 ):
+	         self.cache.close()
+                 self.cache.open('w')
+	         self.game = ' '.join(moves)
+	         self.cache.write(self.game)
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
@@ -93,8 +92,7 @@ class Parser:
 	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
 
 	   finally:
-	      pass
-	      # self.cache.close()
+	      self.cache.close()
 
 	# Board tags:
 	# TODO: determine how to draw boards in such a way that a drop-down menu
