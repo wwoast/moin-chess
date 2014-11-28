@@ -56,7 +56,7 @@ class Parser:
 	self.mode = self.inputs[0]
 	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
-        self.cache = caching.CacheEntry(self.request, self.name, self.name, scope='wiki')
+        self.cache = caching.CacheEntry(self.request, "chess", self.name, scope='wiki')
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
@@ -70,26 +70,23 @@ class Parser:
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
 	   try:
-              # self.cache.open(mode='r')
-              # self.game = cache.read()
-	      self.game = ' '.join(moves)
+              self.cache.open(mode='r')
+              self.game = self.cache.read()
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
-
-	      # Game hasn't been defined yet. Write a PGN to the cache
-	      if ( len(self.game) == 0 ):
-	         # self.cache.close()
-                 # self.cache.open(mode='w')
-	         self.game = ' '.join(moves)
-	         self.cache.write(self.game)
-
-	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
+	      self.cache.close()
 
 	   except IOError as e:
-	      # File read silently fails in the caching object, but file write
-	      # could screw things up. Print error when this happens
+	      # Can't write files? Bad news!
 	      self.error = "I/O error({0}): {1}".format(e.errno, e.strerror)
+
+           except caching.CacheError as e:
+	      # Game hasn't been defined yet. Write a PGN to the cache
+	      self.error = "Cache error: %s" % e
+              self.cache.open(mode='w')
+	      self.game = ' '.join(moves)
+	      self.cache.write(self.game)
 
 	   finally:
 	      self.cache.close()
