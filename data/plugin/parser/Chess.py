@@ -34,8 +34,8 @@ being illustrated will be shown by default.
 """
 
 
-from MoinMoin import wikiutil
-from MoinMoin.parser import wiki
+# from MoinMoin import wikiutil
+# from MoinMoin.parser import wiki
 # from MoinMoin import caching
 # import chess.pgn
 
@@ -44,9 +44,9 @@ MAX_MOVES = 300		# Longest recorded game is 269 moves
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
     def __init__(self, raw, request, **kw):
-        self.body = raw         # text on each line inbetween the {{{ and }}}
-        self.request= request    # request is the HTTPRequest object
-        self.kw=kw               # for example: {{{!# HelloWorld a b c ...
+        self.raw = raw           # text on each line inbetween the {{{ and }}}
+        self.request = request   # request is the HTTPRequest object
+        self.kw = kw             # for example: {{{!# HelloWorld a b c ...
                                  # {'format_args': 'a b c '}	self.error = ""          # Error message to print if necessary        
 	self.game = ""           # The PGN chess game
 
@@ -56,7 +56,7 @@ class Parser:
 	self.name = inputs[0] + ".pgn"
 	self.mode = inputs[1]	# Either "Game" or "Board"
 	# Initiate the Moin cache entry object
-#	self.cache = CacheEntry(request, self.name)
+        # self.cache = CacheEntry(request, self.name)
 
 	# Game tags:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
@@ -64,17 +64,18 @@ class Parser:
 	if ( self.mode == "Game" ):
            # In a "Game" tag, other values are PGN moves. Space and new-line
            # delimited moves to give to the PGN engine
-	   moves = self.body.replace('\n', ' ').split(' ')[2:MAX_MOVES]
+	   moves = self.raw.replace('\n', ' ').split(' ')[2:MAX_MOVES]
 	   
 	   # Try to read from an existing cachefile
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
 	   try:
-#             self.cache.open('r')
-#	      self.game = cache.read()
+              # self.cache.open('r')
+              # self.game = cache.read()
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
+	      self.game = ' '.join(moves)
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      if ( len(self.game) == 0 ):
@@ -102,10 +103,9 @@ class Parser:
 	# way to switch between multiple board divs, each of which contain 64
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
 	elif ( self.mode == "Board" ):
-	   self.position = self.body	# In a "Board" tag, what move to display	   
 	   try:
 	      # self.cache.open('r')
-	      self.game = cache.read()
+	      # self.game = cache.read()
 	      if ( len(self.game) == 0 ):
 	         self.error = "Cache error: Game not found: " + self.name
 
@@ -118,10 +118,12 @@ class Parser:
 	else:
 	   self.error = "Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}"	   
 
-
     def format(self, formatter):
 	# TODO: Write the exact style and board code
 	# from MoinMoin import formatter <<- has the methods we can use here  
         self.request.write(formatter.paragraph(0))
         self.request.write(formatter.text('pgn: ' + self.game))
         self.request.write(formatter.paragraph(0))
+        self.request.write(formatter.text('error: ' + self.error))
+        self.request.write(formatter.paragraph(0))
+        self.request.write(formatter.text('mode: ' + self.mode))
