@@ -36,7 +36,6 @@ being illustrated will be shown by default.
 
 from MoinMoin import caching, wikiutil
 from MoinMoin.parser import text_moin_wiki
-import sys
 # import chess.pgn
 
 MAX_MOVES = 300		# Longest recorded game is 269 moves
@@ -71,19 +70,18 @@ class Parser:
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
 	   try:
-              # self.cache.open('r')
-              # self.game = cache.read()
-	      self.game = ' '.join(moves)
+              self.cache.open('r')
+              self.game = cache.read()
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
-	      # if ( len(self.game) == 0 ):
-	      #    self.cache.close()
-              #    self.cache.open('w')
-	      #    self.game = ' '.join(moves)
-	      #    self.cache.write(self.game)
+	      if ( len(self.game) == 0 ):
+	         self.cache.close()
+                 self.cache.open('w')
+	         self.game = ' '.join(moves)
+	         self.cache.write(self.game)
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
@@ -110,7 +108,6 @@ class Parser:
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
 	#   finally:
-	 #     pass
 	      # self.cache.close()
 
 	else:
@@ -125,5 +122,3 @@ class Parser:
         self.request.write(formatter.text('error: ' + self.error))
         self.request.write(formatter.paragraph(2))
         self.request.write(formatter.text('mode: ' + self.mode ))
-        self.request.write(formatter.paragraph(3))
-        self.request.write(formatter.text('path: ' + str(sys.path) ))
