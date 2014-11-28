@@ -65,7 +65,7 @@ class Parser:
 	if ( self.mode == "Game" ):
            # In a "Game" tag, other values are PGN moves. Space and new-line
            # delimited moves to give to the PGN engine
-	   moves = self.raw.replace('\n', ' ').split(' ')[2:MAX_MOVES]
+	   moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_MOVES]
 	   
 	   # Try to read from an existing cachefile
 	   # If cache read turns up empty, make a new one with the PGN
