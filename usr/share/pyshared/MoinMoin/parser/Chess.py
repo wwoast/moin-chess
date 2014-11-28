@@ -13,13 +13,19 @@ Usage
 -----
 To insert a game into a wiki page, use a "Game" tag. Ideally the PGN is as 
 simple as possible, all on one line.
-{{{#!Chess Game Match-ID Raw-PGN }}}
+{{{#!Chess Game Match-ID 
+Raw-PGN 
+}}}
 
 By default, this just caches a copy of your game on the Wiki server, and
 nothing outputs into the wiki page. To annotate and discuss your game with 
 example boards, use a "Board" tag:
-{{{#!Chess Board Match-ID 23-White }}}   <-- Show White's 23rd move
-{{{#!Chess Board Match-ID 8-Black }}}    <-- Show Black's 8th move
+{{{#!Chess Board Match-ID 
+23-White 
+}}}   <-- Show White's 23rd move
+{{{#!Chess Board Match-ID 
+8-Black 
+}}}    <-- Show Black's 8th move
 
 Each time the chessboard is printed, the move being shown appears in a
 drop-down widget, with the current move illustrated being shown. The entire
@@ -38,9 +44,9 @@ MAX_MOVES = 300		# Longest recorded game is 269 moves
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
     def __init__(self, raw, request, **kw):
-        self.raw = raw           # text inbetween the {{{ and }}}
-        self.request = request   # request is the HTTPRequest object
-        self.kw=kw               # for example: {{{!# HelloWorld a b c }}}
+        self.body = raw         # text on each line inbetween the {{{ and }}}
+        self.request= request    # request is the HTTPRequest object
+        self.kw=kw               # for example: {{{!# HelloWorld a b c ...
                                  # {'format_args': 'a b c '}
 	self.error = ""          # Error message to print if necessary        
 	self.game = ""           # The PGN chess game
@@ -57,8 +63,9 @@ class Parser:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
 	# new one, containing the PGN of the game.
 	if ( self.mode == "Game" ):
-           # In a "Game" tag, other values are PGN moves
-	   self.moves = inputs[2:MAX_MOVES]
+           # In a "Game" tag, other values are PGN moves. Space and new-line
+           # delimited moves to give to the PGN engine
+	   moves = self.body.replace('\n', ' ').split(' ')[2:MAX_MOVES]
 	   
 	   # Try to read from an existing cachefile
 	   # If cache read turns up empty, make a new one with the PGN
@@ -74,8 +81,8 @@ class Parser:
 	      if ( len(self.game) == 0 ):
 	         self.cache.close()
                  self.cache.open('w')
-	         self.cache.write(self.moves)
-	         self.game = self.moves
+	         self.game = ' '.join(self.moves)
+	         self.cache.write(self.game)
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
 
@@ -95,7 +102,7 @@ class Parser:
 	# way to switch between multiple board divs, each of which contain 64
 	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
 	elif ( self.mode == "Board" ):
-	   self.position = inputs[2]	# In a "Board" tag, what move to display	   
+	   self.position = self.body	# In a "Board" tag, what move to display	   
 	   try:
 	      self.cache.open('r')
 	      self.game = cache.read()
