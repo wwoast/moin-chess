@@ -74,6 +74,10 @@ class Parser:
               # self.cache.open('r')
               # self.game = cache.read()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	      self.game = ' '.join(moves)
+>>>>>>> parent of eaca509... Basic cache management
 =======
 	      self.game = ' '.join(moves)
 >>>>>>> parent of eaca509... Basic cache management
@@ -85,15 +89,21 @@ class Parser:
 	      # Game hasn't been defined yet. Write a PGN to the cache
 	      # if ( len(self.game) == 0 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
 	      #   self.cache.close()
               #   self.cache.open('w')
 	      #   self.game = ' '.join(moves)
 	      #   self.cache.write(self.game)
 =======
+=======
+>>>>>>> parent of eaca509... Basic cache management
 	      #    self.cache.close()
               #    self.cache.open('w')
 	      #    self.game = ' '.join(moves)
 	      #    self.cache.write(self.game)
+<<<<<<< HEAD
+>>>>>>> parent of eaca509... Basic cache management
+=======
 >>>>>>> parent of eaca509... Basic cache management
 
 	      # TODO: IS THIS A PROPERLY FORMATTED GAME?
@@ -106,8 +116,11 @@ class Parser:
 	   finally:
 	      pass
 	      # self.cache.close()
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> parent of eaca509... Basic cache management
 
 	# Board tags:
 	# TODO: determine how to draw boards in such a way that a drop-down menu
