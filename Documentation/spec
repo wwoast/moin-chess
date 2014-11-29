@@ -1,0 +1,11 @@
+Idea:
+
+{{{#!Chess Game Match1 
+PGN-or-FEN
+}}}
+--> prints a chess board
+
+{{{#!Chess Board Match1
+8-White
+}}}
+Prints white's 8th move
