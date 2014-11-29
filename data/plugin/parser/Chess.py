@@ -38,7 +38,7 @@ from MoinMoin import caching, wikiutil
 from MoinMoin.parser import text_moin_wiki
 # import chess.pgn
 
-MAX_MOVES = 300		# Longest recorded game is 269 moves
+MAX_PLAYS = 1000		# Longest recorded game is 269 moves
 
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
@@ -64,8 +64,9 @@ class Parser:
 	if ( self.mode == "Game" ):
            # In a "Game" tag, other values are PGN moves. Space and new-line
            # delimited moves to give to the PGN engine
-	   moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_MOVES]
-	   
+	   moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
+
+	   # TODO: make the cachefiles JSON and read them as resources!	   
 	   # Try to read from an existing cachefile
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
