@@ -9,3 +9,7 @@ PGN-or-FEN
 8-White
 }}}
 Prints white's 8th move
+
+
+Takes python-chess ascii board output, and converts it to html divs w/chess
+characters inside
