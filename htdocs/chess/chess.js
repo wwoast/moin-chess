@@ -7,7 +7,7 @@
  * Requires zepto.js
  */
 
-PIECE = new Object;
+var PIECE = new Object;
 PIECE['P'] = '♟';
 PIECE['N'] = '♞';
 PIECE['B'] = '♝';
@@ -65,13 +65,15 @@ function create_rank(board, rank) {
 
 $(function() {
    var chessboards = document.body.querySelectorAll('.chessboard');
-   var output = []
+   var output = new Object;
 
    for ( var i = 0; i < chessboards.length; i++ ) {
       var board = chessboards[i].childNodes[0].innerHTML.split(' ').join('');
+      var id = chessboards[i].id;
 
       var e_board = document.createElement('div');
       e_board.className = "chessboard"; 
+      e_board.id = id;
 
       // The current board is a string representing the board, from upper-left
       // to lower-right squares. Upper-left first square and odd squares are
@@ -82,9 +84,12 @@ $(function() {
          e_board.appendChild(e_rank);
       }
 
-      // Add chessboards to the output[]
+      output[id] = e_board;
    }
 
-   // TODO: For each chessboard, replace the corresponding chessboard div
-   // with the constructed outputs
+   // Now, replace ASCII boards with div-pretty boards
+   for ( var i = 0; i < chessboards.length ; i++ ) {
+      var id = chessboards[i].id;
+      chessboards[i] = output[id];
+   }
 }      
