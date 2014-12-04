@@ -39,7 +39,9 @@ function create_rank(board, rank) {
    // Number is odd or even. Even ranks start with white squares on the left,
    // odd ranks start with black squares on the left.
    // The rank string will get converted into squares by create_square
-   for ( var j = rank*8; j < j+8 ; j++ ) {
+   start = rank*8;
+   end = start + 8;
+   for ( var j = start; j < end ; j++ ) {
       var piece = board[j];
       var sq_color = "bs";
       if ( j % 2 == 0 ) {
@@ -68,7 +70,8 @@ $(function() {
    var output = new Object;
 
    for ( var i = 0; i < chessboards.length; i++ ) {
-      var board = chessboards[i].childNodes[0].innerHTML.split(' ').join('');
+      var board = chessboards[i].childNodes[0].innerHTML;
+      board = board.split(' ').join('').split('\n').join('');
       var id = chessboards[i].id;
 
       var e_board = document.createElement('div');
@@ -92,4 +95,4 @@ $(function() {
       var id = chessboards[i].id;
       chessboards[i] = output[id];
    }
-}      
+});      
