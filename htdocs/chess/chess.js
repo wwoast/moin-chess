@@ -82,8 +82,8 @@ $(function() {
       // to lower-right squares. Upper-left first square and odd squares are
       // white, and even squares are black. Uppercase pieces are white, and
       // lowercase pieces are black.
-      for ( var j = 0; j < board.length; j+8 ) {
-         var e_rank = create_rank(board, j%8);
+      for ( var j = 0; j < board.length; j=j+8 ) {
+         var e_rank = create_rank(board, j/8);
          e_board.appendChild(e_rank);
       }
 
