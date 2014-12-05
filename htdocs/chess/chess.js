@@ -8,12 +8,12 @@
  */
 
 var PIECE = new Object;
-PIECE['P'] = '♟';
-PIECE['N'] = '♞';
-PIECE['B'] = '♝';
-PIECE['R'] = '♜';
-PIECE['Q'] = '♛';
-PIECE['K'] = '♚';
+PIECE['P'] = '&#9823;'   // '♟';
+PIECE['N'] = '&#9822;'   // '♞';
+PIECE['B'] = '&#9821;'   // '♝';
+PIECE['R'] = '&#9820;'   // '♜';
+PIECE['Q'] = '&#9818;'   // '♛';
+PIECE['K'] = '&#9819;'   // '♚';
 PIECE['.'] = '';
 
 function create_square(sq_color, piece_color, piece) {
@@ -44,7 +44,7 @@ function create_rank(board, rank) {
    for ( var j = start; j < end ; j++ ) {
       var piece = board[j];
       var sq_color = "bs";
-      if ( j % 2 == 0 ) {
+      if ( j % 2 == rank % 2 ) {
          sq_color = "ws";
       }
       var piece_color = "_wp";
@@ -93,6 +93,6 @@ $(function() {
    // Now, replace ASCII boards with div-pretty boards
    for ( var i = 0; i < chessboards.length ; i++ ) {
       var id = chessboards[i].id;
-      chessboards[i] = output[id];
+      chessboards[i].innerHTML = output[id].innerHTML;
    }
 });      
