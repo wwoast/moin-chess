@@ -9,15 +9,15 @@ div.chessboard div.rank {
 }
 div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
    display: table-cell;
-   width: 1em;
-   height: 1em;
+   width: 1.2em;
+   height: 1.2em;
    min-width: 10%;
    text-align: center;
    vertical-align: middle;
    margin: 0 0 0 0;
    padding: 0 0 0 0;
    border: solid 1px black;
-   font-size: 24pt;
+   font-size: 40pt;
 }
 div.bs, div.bs_bp, div.bs_wp {
    background-color: #666666;
@@ -27,11 +27,13 @@ div.ws, div.ws_bp, div.ws_wp {
 }
 div.bs_bp, div.ws_bp {
    color: black;
+   text-shadow: #cccccc 0px 0px 12px;
 }
 div.bs_wp, div.ws_wp {
    color: white;
+   text-shadow: #333333 0px 0px 12px;
 }
 pre {
    padding: 0.25em 0.25em 0.25em 0.25em;
-   font-size: 23pt;
+   font-size: 40pt;
 }
