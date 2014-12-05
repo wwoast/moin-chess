@@ -29,11 +29,15 @@ div.ws, div.ws_bp, div.ws_wp {
 }
 div.bs_bp, div.ws_bp {
    color: black;
-   text-shadow: #bbbbbb 0px 0px 12px;
 }
 div.bs_wp, div.ws_wp {
    color: white;
-   text-shadow: #666666 0px 0px 12px;
+}
+div.bs_bp {
+   text-shadow: #bbbbbb 0px 0px 8px;
+}
+div.ws_wp {
+   text-shadow: #666666 0px 0px 8px;
 }
 pre {
    padding: 0.25em 0.25em 0.25em 0.25em;
