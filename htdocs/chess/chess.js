@@ -12,8 +12,8 @@ PIECE['P'] = '&#9823;'   // '♟';
 PIECE['N'] = '&#9822;'   // '♞';
 PIECE['B'] = '&#9821;'   // '♝';
 PIECE['R'] = '&#9820;'   // '♜';
-PIECE['Q'] = '&#9818;'   // '♛';
-PIECE['K'] = '&#9819;'   // '♚';
+PIECE['Q'] = '&#9819;'   // '♛';
+PIECE['K'] = '&#9818;'   // '♚';
 PIECE['.'] = '';
 
 function create_square(sq_color, piece_color, piece) {
