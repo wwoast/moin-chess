@@ -1,3 +1,7 @@
+div.chess-container {
+   min-width: 600px;
+   max-width: 90%;
+}
 div.chessboard {
    display: table;
    border: solid 1px;
@@ -41,5 +45,30 @@ div.ws_wp {
 }
 pre {
    padding: 0.25em 0.25em 0.25em 0.25em;
-   font-size: 40pt;
+   font-size: 36pt;
+}
+div.thismove, div.movelist {
+   padding-top: 2pt;
+   padding-bottom: 4pt;
+}
+div.thismove {
+   font-size: 20pt;
+}
+div.movelist {
+   /* TODO: media queries for different screen sizes */
+   -webkit-column-count: 8;
+   -moz-column-count: 8;
+   column-count: 8;
+   -webkit-column-gap: 10px;
+   -moz-column-gap: 10px;
+   column-gap: 10px;
+   padding: 0 0 0 0;
+   min-width: 300px;
+   max-width: 90%;
+   font-size: 11pt;
+}
+div.movelist ol {
+   display: block;
+   padding-left: 1.8em;
+   margin: 0 0 0 0;
 }
