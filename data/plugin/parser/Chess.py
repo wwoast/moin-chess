@@ -36,7 +36,8 @@ being illustrated will be shown by default.
 
 from MoinMoin import caching, wikiutil
 from MoinMoin.parser import text_moin_wiki
-# import chess.pgn
+from StringIO import StringIO   # read_game can ocur from a cache file this way
+import chess.pgn
 
 MAX_PLAYS = 1000		# Longest recorded game is 269 moves
 
@@ -62,9 +63,6 @@ class Parser:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
 	# new one, containing the PGN of the game.
 	if ( self.mode == "Game" ):
-           # In a "Game" tag, other values are PGN moves. Space and new-line
-           # delimited moves to give to the PGN engine
-	   moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
 
 	   # TODO: make the cachefiles JSON and read them as resources!	   
 	   # Try to read from an existing cachefile
@@ -72,19 +70,32 @@ class Parser:
 	   # At the end, close the file
 	   try:
               self.cache.open(mode='r')
-              self.game = self.cache.read()
+              vfh = StringIO(self.cache.read())
+              self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
+
 	      # TODO: If the cache already exists, verify moves are the same.
 	      # If they are, print an error message and the link to the page
 	      # where the game was first defined.
 	      self.cache.close()
 
            except caching.CacheError as e:
-	      # Game hasn't been defined yet. Write a PGN to the cache
 	      self.error = "Cache error: %s" % e
+
+	      # Game hasn't been defined yet. Write a PGN to the cache
+              # In a "Game" tag, other values are PGN moves. Space and new-line
+              # delimited moves to give to the PGN engine
+   	      moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
               self.cache.open(mode='w')
-	      self.game = ' '.join(moves)
-	      # TODO: Check if the game is valid at (only!) this point!
-	      self.cache.write(self.game)
+
+              vfh = StringIO(' '.join(moves))
+	      self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
+	      exporter = chess.pgn.StringExporter()
+	      moves = str(self.game.export(exporter, headers=False))
+	      self.cache.write(moves)
+
+	   except ValueError as e:
+	      # Error when importing the PGN moves from the wiki {{{ }}} or a file
+	      self.error = "PGN error in %s: %s" % ( self.name, e)
 
 	   except IOError as e:
 	      # Can't write files? Bad news!
@@ -93,19 +104,20 @@ class Parser:
 	   finally:
 	      self.cache.close()
 
-	# Board tags:
-	# TODO: determine how to draw boards in such a way that a drop-down menu
-	# can control the output of the chessboard next to it. Need a performant
-	# way to switch between multiple board divs, each of which contain 64
-	# individual chess square DIV's. Use dropdowns and visibility: hidden. 
+	# Board tags: Just draw a single move from an existing game
 	elif ( self.mode == "Board" ):
 	   try:
 	      self.cache.open(mode='r')
-	      self.game = self.cache.read()
+              vfh = StringIO(self.cache.read())
+              self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
 
            except caching.CacheError as e:
 	      # Game hasn't been defined yet. For board references, print err
 	      self.error = "Tag error: No {{{#!Chess Game %s}}} defined." % self.name
+
+	   except ValueError as e:
+	      # Error importing PGN moves from a file (that never should have been written)
+	      self.error = "PGN error in %s: %s" % ( self.name, e) 
 
 	   finally:
 	      self.cache.close()
@@ -115,13 +127,18 @@ class Parser:
 
 
     def draw_menu(self):
-	"""Given a PGN, create HTML for a menu."""
+	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column DIV with
+	individual moves that are clickable to be shown on the board, in addition to the
+	next and previous buttons"""
 	pass
 	# TODO
 
 
     def draw_board(self, current_move=""):
-	"""Given self.game and current_move, draw the current chess board."""
+	"""Given self.game and current_move, draw the current chess board.
+           All {{{#!Chess Board }}} tags have a current move and will only show
+           a single board with that move. Otherwise, display the opening board,
+           and draw all the other divs below it, hidden by z-order."""
 	if ( current_move == "" ):
 	   current_move = self.position
 
