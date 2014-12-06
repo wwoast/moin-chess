@@ -14,7 +14,8 @@ PIECE['B'] = '&#9821;'   // '♝';
 PIECE['R'] = '&#9820;'   // '♜';
 PIECE['Q'] = '&#9819;'   // '♛';
 PIECE['K'] = '&#9818;'   // '♚';
-PIECE['.'] = '';
+PIECE['.'] = '&nbsp;';   // w/o a non-breaking space, empty squares are 
+                         // smaller than ones with pieces in them!
 
 function create_square(sq_color, piece_color, piece) {
    var e_square = document.createElement('div');
