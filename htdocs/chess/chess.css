@@ -4,12 +4,12 @@ div.chess-container {
 }
 div.chessboard:first-child {
    display: table;
-   border: solid 1px;
-   min-width: 300px;
-   margin-bottom: 5px;
 }
 div.chessboard {
    display: none;   /* Changes to table later */
+   border: solid 1px;
+   min-width: 300px;
+   margin-bottom: 5px;
 }
 div.rank {
    display: table;
@@ -19,13 +19,12 @@ div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
    display: table-cell;
    width: 1.1em;
    height: 1.1em;
-   min-width: 10%;
    text-align: center;
    vertical-align: middle;
    margin: 0 0 0 0;
    padding: 0 0 0 0;
    border: solid 1px black;
-   font-size: 36pt;
+   font-size: 34pt;
 }
 div.bs, div.bs_bp, div.bs_wp {
    background-color: #666666;

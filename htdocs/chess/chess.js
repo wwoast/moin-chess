@@ -95,4 +95,17 @@ $(function() {
       var id = chessboards[i].id;
       chessboards[i].innerHTML = output[id].innerHTML;
    }
-});      
+}); 
+
+
+function switch_board(id, direction) {
+   // Find currently displayed board with this id
+
+
+   // Given "next" or "previous", and a base game name/id, swap
+   // the new board to visible with z-order 1, and hide the other one.
+   if ( direction == "previous" ) {
+   }
+   if ( direction == "next" ) {
+   }
+}
