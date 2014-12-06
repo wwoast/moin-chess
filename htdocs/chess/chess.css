@@ -2,12 +2,16 @@ div.chess-container {
    min-width: 600px;
    max-width: 90%;
 }
-div.chessboard {
+div.chessboard:first-child {
    display: table;
    border: solid 1px;
    min-width: 300px;
+   margin-bottom: 5px;
 }
-div.chessboard div.rank {
+div.chessboard {
+   display: none;   /* Changes to table later */
+}
+div.rank {
    display: table;
    min-width: 300px;
 }
@@ -48,8 +52,8 @@ pre {
    font-size: 36pt;
 }
 div.thismove, div.movelist {
-   padding-top: 2pt;
-   padding-bottom: 4pt;
+   margin-top: 4pt;
+   margin-bottom: 4pt;
 }
 div.thismove {
    font-size: 20pt;
