@@ -17,6 +17,9 @@ PIECE['K'] = '&#9818;'   // '♚';
 PIECE['.'] = '&nbsp;';   // w/o a non-breaking space, empty squares are 
                          // smaller than ones with pieces in them!
 
+var DISPLAY = "";        // Currently displayed board
+
+
 function create_square(sq_color, piece_color, piece) {
    var e_square = document.createElement('div');
 
@@ -96,17 +99,50 @@ $(function() {
       var id = chessboards[i].id;
       chessboards[i].innerHTML = output[id].innerHTML;
    }
+
+   // By default, chess game boards have the first child as displayed
+   DISPLAY = chessboards[0];
 }); 
 
 
-function switch_board(id, direction) {
-   // Find currently displayed board with this id
+function switch_board(to_id) {
+   var current_board = DISPLAY;
+   var new_board = document.getElementById(to_id);
+
+   current_board.style.display = "none";
+   new_board.style.display = "table";
+
+   // For future menu functions, track the current displayed board
+   DISPLAY = new_board;
+}
 
 
-   // Given "next" or "previous", and a base game name/id, swap
-   // the new board to visible with z-order 1, and hide the other one.
-   if ( direction == "previous" ) {
+function adjacent_board(direction) {
+   var current_board = DISPLAY;
+   var chessboards = document.querySelectorAll(".chessboard");
+   var previous_board = "";
+   var next_board = "";
+
+   for ( var i = 0; i < chessboards.length; i++ ) {
+      if ( chessboards[i].id == current_board.id ) {
+         if ( i-1 >= 0 ) {
+            previous_board = chessboards[i-1];
+         } 
+         if ( i+1 < chessboards.length ) {
+            next_board = chessboards[i+1];     
+         }
+         break;
+      }
    }
-   if ( direction == "next" ) {
+
+   if ( direction == "previous" && previous_board != "" ) {
+      current_board.style.display = "none";
+      previous_board.style.display = "table";
+      DISPLAY = previous_board;
+   }
+   if ( direction == "next" && next_board != "" ) {
+      current_board.style.display = "none";
+      next_board.style.display = "table";
+      DISPLAY = next_board;
    }
 }

@@ -37,7 +37,7 @@ R N B Q K B N R
 </pre></div>
 <div class="chessboard" id="game1-2w"><pre>
 r n b q k b n r
-p p p p p p p p
+p p p p . p p p
 . . . . . . . .
 . . . . p . . .
 . . . . P . . .
@@ -55,9 +55,12 @@ p p p p . p p p
 P P P P . P P P
 R . B Q K B N R
 </pre></div>
-<div class="thismove">Previous | Next &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>
+<div class="thismove"><a href="#" onclick="adjacent_board('previous')">Previous</a> | <a href="#" onclick="adjacent_board('next')">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>
 <div class="movelist"><ol>
-<li>e4 e5</li>
+<li>
+   <a href="#" onclick="switch_board('game1-1w')">e4</a> 
+   <a href="#" onclick="switch_board('game1-1b')">e5</a>
+</li>
 <li>Nc3 Nf6</li>
 </ol></div>
 </div>
