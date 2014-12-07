@@ -49,7 +49,7 @@ class Parser:
         self.kw = kw             # for example: {{{!# HelloWorld a b c ...
                                  # {'format_args': 'a b c '}	
 	self.error = ""          # Error message to print if necessary        
-	self.game = ""           # The PGN chess game
+	self.game = ""           # The chess.pgn game object
 
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
@@ -63,8 +63,6 @@ class Parser:
 	# If the name of the game exists, read a cachefile. Otherwise, create a
 	# new one, containing the PGN of the game.
 	if ( self.mode == "Game" ):
-
-	   # TODO: make the cachefiles JSON and read them as resources!	   
 	   # Try to read from an existing cachefile
 	   # If cache read turns up empty, make a new one with the PGN
 	   # At the end, close the file
@@ -130,20 +128,56 @@ class Parser:
 	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column DIV with
 	individual moves that are clickable to be shown on the board, in addition to the
 	next and previous buttons"""
-	pass
-	# TODO
+	# Take self.game and loop through the different moves. Reconstruct these moves
+	# as links that would fit cleanly within an ordered list. Every pair of 
+        # white-move, black-move that we parse, create a new list item.
+	moves = []
+	while node.variations:
+	   next_node = node.variation(0)
+	   moves.append(node.board().san(next_node.move)))
+           node = next_node
+
+	# Based on the list of moves, draw the ordered list           
+	self.request.write(formatter.li(1))
+	for i, move in enumerate(white):
+	   self.request.write(formatter.ol(1))
+	   if ( i % 2 == 0 ):
+	      # TODO: the white move. How to do link onclick or id?
+	      pass
+	   else:
+	      # TODO: the black move. How to do link onclick or id?
+	      pass
+	   self.request.write(formatter.ol(0))
+	self.request.write(formatter.li(0))
 
 
     def draw_board(self, current_move=""):
 	"""Given self.game and current_move, draw the current chess board.
            All {{{#!Chess Board }}} tags have a current move and will only show
            a single board with that move. Otherwise, display the opening board,
-           and draw all the other divs below it, hidden by z-order."""
+           and hide all the other divs until they'r eready to be shown."""
 	if ( current_move == "" ):
 	   current_move = self.position
+	   # TODO: Only draw one board
+	   return
+
+	# Otherwise, grab all boards
+	boards = []
+        while node.variations:
+           next_node = node.variation(0)
+           boards.append(node.board())
+           node = next_node
+
+	# And draw all boards
+	for i, board in enumerate(boards):
+	   if ( i % 2 == 0 ):   # A board representing a white move. Howto id?
+	      pass
+	   else:   # A board representing black moves. Howto id?
+	      pass
 
 
     def format(self, formatter):
+	"""Called by MoinMoin to draw content into the wiki page."""
 	if ( self.error != "" ):
            self.request.write(formatter.preformatted(1))
            self.request.write(formatter.text(self.error))
