@@ -102,6 +102,14 @@ $(function() {
 
    // By default, chess game boards have the first child as displayed
    DISPLAY = chessboards[0];
+
+   // Finally, add event listeners for any menu link buttons. Function
+   // argument inside an anonymous function will act on the click,
+   // rather than firing on the immediate page loading.
+   document.getElementById('previous_move').addEventListener('click', function() {
+      adjacent_board('previous')});
+   document.getElementById('next_move').addEventListener('click', function() {
+      adjacent_board('next')});
 }); 
 
 

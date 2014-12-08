@@ -50,11 +50,11 @@ pre {
    padding: 0.25em 0.25em 0.25em 0.25em;
    font-size: 36pt;
 }
-div.thismove, div.movelist {
+div.movemenu, div.movelist {
    margin-top: 4pt;
    margin-bottom: 4pt;
 }
-div.thismove {
+div.movemenu {
    font-size: 20pt;
 }
 div.movelist {

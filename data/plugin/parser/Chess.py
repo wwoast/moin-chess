@@ -137,25 +137,28 @@ class Parser:
 	   moves.append(node.board().san(next_node.move)))
            node = next_node
 
-	# Based on the list of moves, draw the ordered list           
-	self.request.write(formatter.li(1))
+	# Based on the list of moves, draw the ordered list
+	turn = 1 
+	self.request.write(formatter.rawHTML('<li>'))
 	for i, move in enumerate(white):
-	   self.request.write(formatter.ol(1))
+	   self.request.write(formatter.rawHTML('<ol>'))
 	   if ( i % 2 == 0 ):
-	      # TODO: the white move. How to do link onclick or id?
-	      pass
+	      board_switch = "'" + self.name + "-" + str(turn) + "w" + "'"
 	   else:
-	      # TODO: the black move. How to do link onclick or id?
-	      pass
-	   self.request.write(formatter.ol(0))
-	self.request.write(formatter.li(0))
+	      board_switch = "'" + self.name + "-" + str(turn) + "b" + "'"
+	      turn++
+	   move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
+	   self.request.write(formatter.rawHTML(move_link))
+
+	   self.request.write(formatter.rawHTML('</ol>'))
+	self.request.write(formatter.rawHTML('</li>'))
 
 
     def draw_board(self, current_move=""):
 	"""Given self.game and current_move, draw the current chess board.
            All {{{#!Chess Board }}} tags have a current move and will only show
            a single board with that move. Otherwise, display the opening board,
-           and hide all the other divs until they'r eready to be shown."""
+           and hide all the other divs until they're ready to be shown."""
 	if ( current_move == "" ):
 	   current_move = self.position
 	   # TODO: Only draw one board
@@ -169,11 +172,15 @@ class Parser:
            node = next_node
 
 	# And draw all boards
+	turn = 1
 	for i, board in enumerate(boards):
-	   if ( i % 2 == 0 ):   # A board representing a white move. Howto id?
-	      pass
-	   else:   # A board representing black moves. Howto id?
-	      pass
+	   if ( i % 2 == 0 ):   # A board representing a white move
+	      board_id = self.name + "-" + str(turn) + "w"
+	   else:   # A board representing black moves
+	      board_id = self.name + "-" + str(turn) + "b"
+	      turn++
+	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + board + "\n" + '</pre></div>'
+	   self.request.write(formatter.rawHTML(board_html))
 
 
     def format(self, formatter):
