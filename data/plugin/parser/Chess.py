@@ -193,5 +193,8 @@ class Parser:
            self.request.write(formatter.preformatted(0))
 	   print self.error	# For uwsgi logs
 	else:
+	   # TODO: Insert style / js scripts once per chess tag.
+	   # Sadly no better way to include these styles unless
+	   # all themes supported moin-chess. :(
 	   self.draw_board(formatter)
 	   # self.draw_menu(formatter)
