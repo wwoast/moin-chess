@@ -132,9 +132,10 @@ class Parser:
 	# as links that would fit cleanly within an ordered list. Every pair of 
         # white-move, black-move that we parse, create a new list item.
 	moves = []
+	node = self.game
 	while node.variations:
 	   next_node = node.variation(0)
-	   moves.append(node.board().san(next_node.move)))
+	   moves.append(node.board().san(next_node.move))
            node = next_node
 
 	# Based on the list of moves, draw the ordered list
@@ -146,7 +147,7 @@ class Parser:
 	      board_switch = "'" + self.name + "-" + str(turn) + "w" + "'"
 	   else:
 	      board_switch = "'" + self.name + "-" + str(turn) + "b" + "'"
-	      turn++
+	      turn = turn + 1
 	   move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
 	   self.request.write(formatter.rawHTML(move_link))
 
@@ -160,12 +161,13 @@ class Parser:
            a single board with that move. Otherwise, display the opening board,
            and hide all the other divs until they're ready to be shown."""
 	if ( current_move == "" ):
-	   current_move = self.position
+	   # current_move = self.position
 	   # TODO: Only draw one board
 	   return
 
 	# Otherwise, grab all boards
 	boards = []
+	node = self.game
         while node.variations:
            next_node = node.variation(0)
            boards.append(node.board())
@@ -178,7 +180,7 @@ class Parser:
 	      board_id = self.name + "-" + str(turn) + "w"
 	   else:   # A board representing black moves
 	      board_id = self.name + "-" + str(turn) + "b"
-	      turn++
+	      turn = turn + 1
 	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + board + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
 
