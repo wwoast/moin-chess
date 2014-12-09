@@ -191,6 +191,5 @@ class Parser:
            self.request.write(formatter.preformatted(0))
 	   print self.error	# For uwsgi logs
 	else:
-           self.request.write(formatter.preformatted(1))
-           self.request.write(formatter.text(self.name + ': ' + self.game))
-           self.request.write(formatter.preformatted(0))
+	   self.draw_board()
+	   self.draw_menu()
