@@ -124,7 +124,7 @@ class Parser:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
 
 
-    def draw_menu(self):
+    def draw_menu(self, formatter):
 	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column DIV with
 	individual moves that are clickable to be shown on the board, in addition to the
 	next and previous buttons"""
@@ -155,7 +155,7 @@ class Parser:
 	self.request.write(formatter.rawHTML('</li>'))
 
 
-    def draw_board(self, current_move=""):
+    def draw_board(self, formatter, current_move=""):
 	"""Given self.game and current_move, draw the current chess board.
            All {{{#!Chess Board }}} tags have a current move and will only show
            a single board with that move. Otherwise, display the opening board,
@@ -170,7 +170,7 @@ class Parser:
 	node = self.game
         while node.variations:
            next_node = node.variation(0)
-           boards.append(node.board())
+           boards.append(unicode(node.board()))
            node = next_node
 
 	# And draw all boards
@@ -181,7 +181,7 @@ class Parser:
 	   else:   # A board representing black moves
 	      board_id = self.name + "-" + str(turn) + "b"
 	      turn = turn + 1
-	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + str(board()) + "\n" + '</pre></div>'
+	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + board + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
 
 
@@ -193,5 +193,5 @@ class Parser:
            self.request.write(formatter.preformatted(0))
 	   print self.error	# For uwsgi logs
 	else:
-	   self.draw_board()
-	   # self.draw_menu()
+	   self.draw_board(formatter)
+	   # self.draw_menu(formatter)
