@@ -160,10 +160,10 @@ class Parser:
            All {{{#!Chess Board }}} tags have a current move and will only show
            a single board with that move. Otherwise, display the opening board,
            and hide all the other divs until they're ready to be shown."""
-	if ( current_move == "" ):
+	# if ( current_move == "" ):
 	   # current_move = self.position
 	   # TODO: Only draw one board
-	   return
+	   # return
 
 	# Otherwise, grab all boards
 	boards = []
@@ -181,7 +181,7 @@ class Parser:
 	   else:   # A board representing black moves
 	      board_id = self.name + "-" + str(turn) + "b"
 	      turn = turn + 1
-	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + board + "\n" + '</pre></div>'
+	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + str(board()) + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
 
 
@@ -194,4 +194,4 @@ class Parser:
 	   print self.error	# For uwsgi logs
 	else:
 	   self.draw_board()
-	   self.draw_menu()
+	   # self.draw_menu()
