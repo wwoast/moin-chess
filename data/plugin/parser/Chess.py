@@ -40,6 +40,14 @@ from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
 
 MAX_PLAYS = 1000		# Longest recorded game is 269 moves
+INLINE_JS = [ 
+   "chess/chess.js",
+   "chess/zepto.js"
+]
+INLINE_CSS = [
+   "chess/chess.css"
+]
+
 
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
@@ -125,12 +133,13 @@ class Parser:
 
 
     def draw_menu(self, formatter):
-	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column DIV with
-	individual moves that are clickable to be shown on the board, in addition to the
-	next and previous buttons"""
-	# Take self.game and loop through the different moves. Reconstruct these moves
-	# as links that would fit cleanly within an ordered list. Every pair of 
-        # white-move, black-move that we parse, create a new list item.
+	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column
+	DIV with individual moves that are clickable to be shown on the board,
+	in addition to the next and previous buttons"""
+	# Take self.game and loop through the different moves. Reconstruct 
+	# these moves as links that would fit cleanly within an ordered list. 
+	# For every pair of white-move, black-move that we parse, create a new
+	# list item with clickable links.
 	moves = []
 	node = self.game
 	while node.variations:
@@ -193,8 +202,14 @@ class Parser:
            self.request.write(formatter.preformatted(0))
 	   print self.error	# For uwsgi logs
 	else:
-	   # TODO: Insert style / js scripts once per chess tag.
 	   # Sadly no better way to include these styles unless
 	   # all themes supported moin-chess. :(
+	   for style in INLINE_CSS:
+	      tag = '<link rel="stylesheet" type="text/css" href="' + style + '">'
+	      self.request.write(formatter.rawHTML(tag))
+	   for script in INLINE_JS:
+	      tag = '<script type="text/javascript" src="' + script + '"></script>'
+	      self.request.write(formatter.rawHTML(tag))
+
 	   self.draw_board(formatter)
 	   # self.draw_menu(formatter)
