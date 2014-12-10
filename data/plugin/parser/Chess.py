@@ -40,13 +40,7 @@ from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
 
 MAX_PLAYS = 1000		# Longest recorded game is 269 moves
-INLINE_JS = [ 
-   "chess/chess.js",
-   "chess/zepto.js"
-]
-INLINE_CSS = [
-   "chess/chess.css"
-]
+STUB_SCRIPT = "htdocs/chess/chess-plugin.js"
 
 
 class Parser:
@@ -204,12 +198,8 @@ class Parser:
 	else:
 	   # Sadly no better way to include these styles unless
 	   # all themes supported moin-chess. :(
-	   for style in INLINE_CSS:
-	      tag = '<link rel="stylesheet" type="text/css" href="' + style + '">'
-	      self.request.write(formatter.rawHTML(tag))
-	   for script in INLINE_JS:
-	      tag = '<script type="text/javascript" src="' + script + '"></script>'
-	      self.request.write(formatter.rawHTML(tag))
+	   tag = '<script type="text/javascript" src="' + STUB_SCRIPT + '"></script>'
+	   self.request.write(formatter.rawHTML(tag))
 
 	   self.draw_board(formatter)
 	   # self.draw_menu(formatter)
