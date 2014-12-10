@@ -207,7 +207,9 @@ class Parser:
 	   # TODO: If STUB_SCRIPT doesn't exist, write a new one with 
 	   # the correct paths in place to the other files
 	   tag = '<script type="text/javascript" src="' + STUB_SCRIPT + '"></script>'
-	   self.request.write(formatter.rawHTML(tag))
 
+	   self.request.write(formatter.rawHTML(tag))
+	   self.request.write(formatter.rawHTML('<div class="chess-container">'))
 	   self.draw_board(formatter)
 	   self.draw_menu(formatter)
+	   self.request.write(formatter.rawHTML('</div>'))

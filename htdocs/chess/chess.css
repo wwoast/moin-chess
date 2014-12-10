@@ -2,7 +2,7 @@ div.chess-container {
    min-width: 600px;
    max-width: 90%;
 }
-div.polishboard:first-child {
+div.chess-container:first-child {
    display: table;
 }
 div.chessboard, div.polishboard {

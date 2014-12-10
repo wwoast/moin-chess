@@ -98,6 +98,7 @@ $(function() {
    for ( var i = 0; i < chessboards.length ; i++ ) {
       var id = chessboards[i].id;
       chessboards[i].innerHTML = output[id].innerHTML;
+      chessboards[i].className = "polishboard";
    }
 
    // By default, chess game boards have the first child as displayed
