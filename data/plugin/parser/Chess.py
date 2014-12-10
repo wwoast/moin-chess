@@ -41,7 +41,7 @@ from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
 
 MAX_PLAYS = 1000		# Longest recorded game is 269 moves
-STUB_SCRIPT = url_prefix_static + "/chess/chess-plugin.js"
+STUB_SCRIPT = url_prefix_static + "/chess/head.js"
 
 
 class Parser:
@@ -144,19 +144,24 @@ class Parser:
 
 	# Based on the list of moves, draw the ordered list
 	turn = 1 
-	self.request.write(formatter.rawHTML('<li>'))
-	for i, move in enumerate(white):
-	   self.request.write(formatter.rawHTML('<ol>'))
+	self.request.write(formatter.rawHTML('<ol>'))
+	for i, move in enumerate(moves):
+	   self.request.write(formatter.rawHTML('<li>'))
 	   if ( i % 2 == 0 ):
 	      board_switch = "'" + self.name + "-" + str(turn) + "w" + "'"
+	      move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
+	      self.request.write(formatter.rawHTML(move_link))
+	      if ( i + 1 == len(moves)):   # White move ends game
+	         self.request.write(formatter.rawHTML('</li>'))
+
 	   else:
 	      board_switch = "'" + self.name + "-" + str(turn) + "b" + "'"
+	      move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
 	      turn = turn + 1
-	   move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
-	   self.request.write(formatter.rawHTML(move_link))
+	      self.request.write(formatter.rawHTML(move_link))
+	      self.request.write(formatter.rawHTML('</li>'))
 
-	   self.request.write(formatter.rawHTML('</ol>'))
-	self.request.write(formatter.rawHTML('</li>'))
+	self.request.write(formatter.rawHTML('</ol>'))
 
 
     def draw_board(self, formatter, current_move=""):
@@ -199,8 +204,10 @@ class Parser:
 	else:
 	   # Sadly no better way to include these styles unless
 	   # all themes supported moin-chess. :(
+	   # TODO: If STUB_SCRIPT doesn't exist, write a new one with 
+	   # the correct paths in place to the other files
 	   tag = '<script type="text/javascript" src="' + STUB_SCRIPT + '"></script>'
 	   self.request.write(formatter.rawHTML(tag))
 
 	   self.draw_board(formatter)
-	   # self.draw_menu(formatter)
+	   self.draw_menu(formatter)
