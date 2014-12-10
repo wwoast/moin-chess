@@ -36,11 +36,12 @@ being illustrated will be shown by default.
 
 from MoinMoin import caching, wikiutil
 from MoinMoin.parser import text_moin_wiki
+from MoinMoin.config import url_prefix_static
 from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
 
 MAX_PLAYS = 1000		# Longest recorded game is 269 moves
-STUB_SCRIPT = "htdocs/chess/chess-plugin.js"
+STUB_SCRIPT = url_prefix_static + "/chess/chess-plugin.js"
 
 
 class Parser:
