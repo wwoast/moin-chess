@@ -79,7 +79,7 @@ $(function() {
       var id = chessboards[i].id;
 
       var e_board = document.createElement('div');
-      e_board.className = "chessboard"; 
+      e_board.className = "polishboard"; 
       e_board.id = id;
 
       // The current board is a string representing the board, from upper-left
@@ -94,7 +94,7 @@ $(function() {
       output[id] = e_board;
    }
 
-   // Now, replace ASCII boards with div-pretty boards
+   // Now, replace ASCII boards with div-pretty polishboards
    for ( var i = 0; i < chessboards.length ; i++ ) {
       var id = chessboards[i].id;
       chessboards[i].innerHTML = output[id].innerHTML;
@@ -127,7 +127,7 @@ function switch_board(to_id) {
 
 function adjacent_board(direction) {
    var current_board = DISPLAY;
-   var chessboards = document.querySelectorAll(".chessboard");
+   var chessboards = document.querySelectorAll(".polishboard");
    var previous_board = "";
    var next_board = "";
 

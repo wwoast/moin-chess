@@ -144,12 +144,12 @@ class Parser:
 
 	# Based on the list of moves, draw the ordered list
 	turn = 1 
-	self.request.write(formatter.rawHTML('<ol>'))
+	self.request.write(formatter.rawHTML('<div class="movelist"><ol>'))
 	for i, move in enumerate(moves):
-	   self.request.write(formatter.rawHTML('<li>'))
 	   if ( i % 2 == 0 ):
+	      self.request.write(formatter.rawHTML('<li>'))
 	      board_switch = "'" + self.name + "-" + str(turn) + "w" + "'"
-	      move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
+	      move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
@@ -161,7 +161,7 @@ class Parser:
 	      self.request.write(formatter.rawHTML(move_link))
 	      self.request.write(formatter.rawHTML('</li>'))
 
-	self.request.write(formatter.rawHTML('</ol>'))
+	self.request.write(formatter.rawHTML('</ol></div>'))
 
 
     def draw_board(self, formatter, current_move=""):
@@ -190,7 +190,7 @@ class Parser:
 	   else:   # A board representing black moves
 	      board_id = self.name + "-" + str(turn) + "b"
 	      turn = turn + 1
-	   board_html = '<div class="chessboard" id="' + board_id + '"><pre>' + "\n" + board + "\n" + '</pre></div>'
+	   board_html = '<div class="chessboard" id="' + board_id + '"><pre class="chess_plain">' + "\n" + board + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
 
 

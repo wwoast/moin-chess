@@ -2,10 +2,10 @@ div.chess-container {
    min-width: 600px;
    max-width: 90%;
 }
-div.chessboard:first-child {
+div.polishboard:first-child {
    display: table;
 }
-div.chessboard {
+div.chessboard, div.polishboard {
    display: none;   /* Changes to table later */
    border: solid 1px;
    min-width: 300px;
@@ -46,7 +46,7 @@ div.bs_bp {
 div.ws_wp {
    text-shadow: #666666 0px 0px 8px;
 }
-pre {
+pre.chess_plain {
    padding: 0.25em 0.25em 0.25em 0.25em;
    font-size: 36pt;
 }
