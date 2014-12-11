@@ -71,6 +71,8 @@ function create_menu_listeners() {
    // Look at all link ids. Anything with a game name in it gets a
    // switch_board click listener. Anything with a previous_move or
    // next_move in it gets a adjacent_board click listener.
+
+   // TODO: Use consistent easy-to-search prefixes
    
    // Finally, add event listeners for any menu link buttons. Function
    // argument inside an anonymous function will act on the click,
