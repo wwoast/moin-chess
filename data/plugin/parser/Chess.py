@@ -132,7 +132,8 @@ class Parser:
 	DIV with individual moves that are clickable to be shown on the board,
 	in addition to the next and previous buttons"""
 	# Write the game move select menu first
-	self.request.write(formatter.rawHTML('<div class="movemenu"><a id="previous_move" href="#">Previous</a> | <a id="next_move" href="#">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'))
+	menu = '<div class="movemenu"><a id="previous_move" href="#">Previous</a> | <a id="next_move" href="#">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
+	self.request.write(formatter.rawHTML(menu))
 
 	# Take self.game and loop through the different moves. Reconstruct 
 	# these moves as links that would fit cleanly within an ordered list. 
