@@ -131,6 +131,9 @@ class Parser:
 	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column
 	DIV with individual moves that are clickable to be shown on the board,
 	in addition to the next and previous buttons"""
+	# Write the game move select menu first
+	self.request.write(formatter.rawHTML('<div class="movemenu"><a id="previous_move" href="#">Previous</a> | <a id="next_move" href="#">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'))
+
 	# Take self.game and loop through the different moves. Reconstruct 
 	# these moves as links that would fit cleanly within an ordered list. 
 	# For every pair of white-move, black-move that we parse, create a new
