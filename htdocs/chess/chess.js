@@ -17,8 +17,6 @@ PIECE['K'] = '&#9818;'   // '♚';
 PIECE['.'] = '&nbsp;';   // w/o a non-breaking space, empty squares are 
                          // smaller than ones with pieces in them!
 
-var DISPLAY = "";        // Currently displayed board
-
 
 function create_square(sq_color, piece_color, piece) {
    var e_square = document.createElement('div');
@@ -69,6 +67,22 @@ function create_rank(board, rank) {
 }
 
 
+function create_menu_listeners() {
+   // Look at all link ids. Anything with a game name in it gets a
+   // switch_board click listener. Anything with a previous_move or
+   // next_move in it gets a adjacent_board click listener.
+   
+   // Finally, add event listeners for any menu link buttons. Function
+   // argument inside an anonymous function will act on the click,
+   // rather than firing on the immediate page loading.
+   document.getElementById('previous_move').addEventListener('click', function() {
+      adjacent_board('previous')});
+   document.getElementById('next_move').addEventListener('click', function() {
+      adjacent_board('next')});
+}); 
+}
+
+
 $(function() {
    var chessboards = document.body.querySelectorAll('.chessboard');
    var output = new Object;
@@ -100,40 +114,24 @@ $(function() {
       chessboards[i].innerHTML = output[id].innerHTML;
       chessboards[i].className = "polishboard";
    }
-
-   // By default, chess game boards have the first child as displayed
-   DISPLAY = chessboards[0];
-
-   // Finally, add event listeners for any menu link buttons. Function
-   // argument inside an anonymous function will act on the click,
-   // rather than firing on the immediate page loading.
-   document.getElementById('previous_move').addEventListener('click', function() {
-      adjacent_board('previous')});
-   document.getElementById('next_move').addEventListener('click', function() {
-      adjacent_board('next')});
-}); 
-
-
-function switch_board(to_id) {
-   var current_board = DISPLAY;
-   var new_board = document.getElementById(to_id);
-
-   current_board.style.display = "none";
-   new_board.style.display = "table";
-
-   // For future menu functions, track the current displayed board
-   DISPLAY = new_board;
 }
 
 
-function adjacent_board(direction) {
-   var current_board = DISPLAY;
+function switch_board(this_board, to_id) {
+   var new_board = document.getElementById(to_id);
+
+   this_board.style.display = "none";
+   new_board.style.display = "table";
+}
+
+
+function adjacent_board(this_board, direction) {
    var chessboards = document.querySelectorAll(".polishboard");
    var previous_board = "";
    var next_board = "";
 
    for ( var i = 0; i < chessboards.length; i++ ) {
-      if ( chessboards[i].id == current_board.id ) {
+      if ( chessboards[i].id == this_board.id ) {
          if ( i-1 >= 0 ) {
             previous_board = chessboards[i-1];
          } 
@@ -145,13 +143,11 @@ function adjacent_board(direction) {
    }
 
    if ( direction == "previous" && previous_board != "" ) {
-      current_board.style.display = "none";
+      this_board.style.display = "none";
       previous_board.style.display = "table";
-      DISPLAY = previous_board;
    }
    if ( direction == "next" && next_board != "" ) {
-      current_board.style.display = "none";
+      this_board.style.display = "none";
       next_board.style.display = "table";
-      DISPLAY = next_board;
    }
 }

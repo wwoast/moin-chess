@@ -132,7 +132,7 @@ class Parser:
 	DIV with individual moves that are clickable to be shown on the board,
 	in addition to the next and previous buttons"""
 	# Write the game move select menu first
-	menu = '<div class="movemenu"><a id="previous_move" href="#">Previous</a> | <a id="next_move" href="#">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
+	menu = '<div class="movemenu"><a id="' + self.name + '-previous_move" href="#">Previous</a> | <a id="' + self.name + '-next_move" href="#">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
 	self.request.write(formatter.rawHTML(menu))
 
 	# Take self.game and loop through the different moves. Reconstruct 
@@ -153,14 +153,14 @@ class Parser:
 	   if ( i % 2 == 0 ):
 	      self.request.write(formatter.rawHTML('<li>'))
 	      board_switch = "'" + self.name + "-" + str(turn) + "w" + "'"
-	      move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a> &nbsp;'
+	      move_link = '<a href="#" id="' + board_switch + '">' + move + '</a> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
 
 	   else:
 	      board_switch = "'" + self.name + "-" + str(turn) + "b" + "'"
-	      move_link = '<a href="#" onclick="switch_board(' + board_switch + ')">' + move + '</a>'
+	      move_link = '<a href="#" id="' + board_switch + '">' + move + '</a>'
 	      turn = turn + 1
 	      self.request.write(formatter.rawHTML(move_link))
 	      self.request.write(formatter.rawHTML('</li>'))
