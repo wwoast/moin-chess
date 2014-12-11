@@ -79,7 +79,6 @@ function create_menu_listeners() {
       adjacent_board('previous')});
    document.getElementById('next_move').addEventListener('click', function() {
       adjacent_board('next')});
-}); 
 }
 
 
@@ -114,7 +113,7 @@ $(function() {
       chessboards[i].innerHTML = output[id].innerHTML;
       chessboards[i].className = "polishboard";
    }
-}
+});
 
 
 function switch_board(this_board, to_id) {
