@@ -207,18 +207,18 @@ function adjacent_board(game_name, direction) {
       if ( chessboards[i].id == this_board.id ) {
          if ( i-1 >= 0 ) {
             previous_board = chessboards[i-1];
-            prev_split = link_id_names(chessboards[i-1].id);
+            var prev_split = link_id_names(chessboards[i-1].id);
             if ( id_split[1] != prev_split[1] ) {
                // Not the same game names
-               prev_split = '';
+               previous_board = '';
             }
          } 
          if ( i+1 < chessboards.length ) {
             next_board = chessboards[i+1]; 
-            next_split = link_id_names(chessboards[i+1].id);
-            if ( id_split[1] != name_split[1] ) {
+            var next_split = link_id_names(chessboards[i+1].id);
+            if ( id_split[1] != next_split[1] ) {
                // Not the same game names
-               next_split = '';
+               next_board = '';
             }
          }
          break;
