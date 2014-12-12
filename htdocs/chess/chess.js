@@ -92,23 +92,25 @@ function create_menu_listeners() {
    // NOTE: Function argument inside an anonymous function will act 
    // on the click, rather than firing on the immediate page loading.
    for ( var i = 0; i < links.length; i++ ) {
-      link_id = links[i].id;
+      var link_id = links[i].id;
       if ( link_id.indexOf("ch_") == 0 ) {
-         id_splits = link_id_names(link_id);
+         var id_splits = link_id_names(link_id);
+         var game_name = id_splits[1]
+         var game_move = id_splits[2]
          if ( id_splits[0] == "ch_m" ) {
             // This is a chess move link
-            links[i].addEventListener('click', function() {
-               switch_board(id_splits[1], id_splits[2])});
+            links[i].addEventListener('click', function(game_name, game_move) {
+               switch_board(game_name, game_move)});
          }
          if ( id_splits[0] == "ch_pm" ) {
             // This is a previous move link
-            links[i].addEventListener('click', function() {
-               adjacent_board(id_splits[1], "previous")});
+            links[i].addEventListener('click', function(game_name) {
+               adjacent_board(game_name, "previous")});
          }
          if ( id_splits[0] == "ch_nm" ) {
             // This is a next move link
-            links[i].addEventListener('click', function() {
-               adjacent_board(id_splits[1], "next")});
+            links[i].addEventListener('click', function(game_name) {
+               adjacent_board(game_name, "next")});
          }
       }
    }
@@ -152,6 +154,7 @@ $(function() {
    for ( var i = 0; i < chessboards.length ; i++ ) {
       var id = chessboards[i].id;
       chessboards[i].innerHTML = output[id].innerHTML;
+      chessboards[i].style.display = output[id].style.display;
       chessboards[i].className = "polishboard";
    }
 

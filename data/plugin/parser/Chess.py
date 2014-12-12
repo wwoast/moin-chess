@@ -130,9 +130,11 @@ class Parser:
     def draw_menu(self, formatter):
 	"""Given a PGN, create HTML for a menu. This is a 8-column multi-column
 	DIV with individual moves that are clickable to be shown on the board,
-	in addition to the next and previous buttons"""
-	# Write the game move select menu first
-	menu = '<div class="movemenu"><a id="ch_pm|' + self.name + '" href="#jslink">Previous</a> | <a id="ch_nm|' + self.name + '" href="#jslink">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
+	in addition to the next and previous buttons."""
+	# Write the game move select menu first. Like all link ids, have a 
+	# pipe-delimited head, and an underscore-delimited foot, for js 
+	# parsing consistency
+	menu = '<div class="movemenu"><a id="ch_pm|' + self.name + '_" href="#jslink">Previous</a> | <a id="ch_nm|' + self.name + '_" href="#jslink">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
 	self.request.write(formatter.rawHTML(menu))
 
 	# Take self.game and loop through the different moves. Reconstruct 
