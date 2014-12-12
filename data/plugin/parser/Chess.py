@@ -154,14 +154,14 @@ class Parser:
 	for i, move in enumerate(moves):
 	   if ( i % 2 == 0 ):
 	      self.request.write(formatter.rawHTML('<li>'))
-	      board_switch = self.name + "_" + str(turn) + "w"
+	      board_switch = self.name + "_" + str(turn) + "b"
 	      move_link = '<a href="#jslink" id="ch_m|' + board_switch + '">' + move + '</a> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
 
 	   else:
-	      board_switch = self.name + "_" + str(turn) + "b"
+	      board_switch = self.name + "_" + str(turn+1) + "w"
 	      move_link = '<a href="#jslink" id="ch_m|' + board_switch + '">' + move + '</a>'
 	      turn = turn + 1
 	      self.request.write(formatter.rawHTML(move_link))
@@ -187,6 +187,8 @@ class Parser:
            next_node = node.variation(0)
            boards.append(unicode(node.board()))
            node = next_node
+	# Last board at the end of the variations list
+        boards.append(unicode(node.board()))
 
 	# And draw all boards
 	turn = 1
