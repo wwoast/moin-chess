@@ -83,6 +83,16 @@ function link_id_names(lid) {
 }
 
 
+function create_listener(link, callback, game_name, game_move) {
+   // For scoping functions (closures), the addEventListeners must
+   // be inside a scope outside the create_menu_listeners loop.
+   // Otherwise the environment of the event callbacks is equivalent
+   // to the last iteration of the loop. It's super annoying!
+   link.addEventListener('click', function() {
+      callback(game_name, game_move)});
+}
+
+
 function create_menu_listeners() {
    // Look at all link ids. Anything with a game name in it gets a
    // switch_board click listener. Anything with a previous_move or
@@ -95,22 +105,19 @@ function create_menu_listeners() {
       var link_id = links[i].id;
       if ( link_id.indexOf("ch_") == 0 ) {
          var id_splits = link_id_names(link_id);
-         var game_name = id_splits[1]
-         var game_move = id_splits[2]
+         var game_name = id_splits[1];
+         var game_move = id_splits[2];
          if ( id_splits[0] == "ch_m" ) {
             // This is a chess move link
-            links[i].addEventListener('click', function(game_name, game_move) {
-               switch_board(game_name, game_move)});
+            create_listener(links[i], switch_board, game_name, game_move);
          }
          if ( id_splits[0] == "ch_pm" ) {
             // This is a previous move link
-            links[i].addEventListener('click', function(game_name) {
-               adjacent_board(game_name, "previous")});
+            create_listener(links[i], adjacent_board, game_name, "previous");
          }
          if ( id_splits[0] == "ch_nm" ) {
             // This is a next move link
-            links[i].addEventListener('click', function(game_name) {
-               adjacent_board(game_name, "next")});
+            create_listener(links[i], adjacent_board, game_name, "next");
          }
       }
    }
