@@ -92,6 +92,7 @@ function create_menu_listeners() {
    // NOTE: Function argument inside an anonymous function will act 
    // on the click, rather than firing on the immediate page loading.
    for ( var i = 0; i < links.length; i++ ) {
+      link_id = links[i].id;
       if ( link_id.indexOf("ch_") == 0 ) {
          id_splits = link_id_names(link_id);
          if ( id_splits[0] == "ch_m" ) {
@@ -117,6 +118,7 @@ function create_menu_listeners() {
 $(function() {
    var chessboards = document.body.querySelectorAll('.chessboard');
    var output = new Object;
+   var game_name = "";
 
    for ( var i = 0; i < chessboards.length; i++ ) {
       var board = chessboards[i].childNodes[0].innerHTML;
@@ -135,6 +137,13 @@ $(function() {
          var e_rank = create_rank(board, j/8);
          e_board.appendChild(e_rank);
       }
+      
+      // If this is the first board drawn for a new game, make it displayable
+      var id_split = link_id_names(id);     
+      if ( id_split[1] != game_name ) {
+         e_board.style.display = "table";
+         game_name = id_split[1];
+      }
 
       output[id] = e_board;
    }
@@ -148,7 +157,7 @@ $(function() {
 
    // And now that the boards are drawn, draw menus using the game
    // id name from the first chessboard
-   createMenuListeners();
+   create_menu_listeners();
 });
 
 

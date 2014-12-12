@@ -152,14 +152,14 @@ class Parser:
 	for i, move in enumerate(moves):
 	   if ( i % 2 == 0 ):
 	      self.request.write(formatter.rawHTML('<li>'))
-	      board_switch = "'" + self.name + "_" + str(turn) + "w" + "'"
+	      board_switch = self.name + "_" + str(turn) + "w"
 	      move_link = '<a href="#jslink" id="ch_m|' + board_switch + '">' + move + '</a> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
 
 	   else:
-	      board_switch = "'" + self.name + "_" + str(turn) + "b" + "'"
+	      board_switch = self.name + "_" + str(turn) + "b"
 	      move_link = '<a href="#jslink" id="ch_m|' + board_switch + '">' + move + '</a>'
 	      turn = turn + 1
 	      self.request.write(formatter.rawHTML(move_link))
@@ -190,11 +190,11 @@ class Parser:
 	turn = 1
 	for i, board in enumerate(boards):
 	   if ( i % 2 == 0 ):   # A board representing a white move
-	      board_id = self.name + "-" + str(turn) + "w"
+	      board_id = self.name + "_" + str(turn) + "w"
 	   else:   # A board representing black moves
-	      board_id = self.name + "-" + str(turn) + "b"
+	      board_id = self.name + "_" + str(turn) + "b"
 	      turn = turn + 1
-	   board_html = '<div class="chessboard" id="' + board_id + '"><pre class="chess_plain">' + "\n" + board + "\n" + '</pre></div>'
+	   board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + board + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
 
 
