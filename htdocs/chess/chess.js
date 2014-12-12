@@ -187,7 +187,7 @@ function current_board(game_name) {
 function switch_board(game_name, to_id) {
    // Used for the individual chess moves, to allow the board to be changed
    var this_board = current_board(game_name);
-   var new_board = document.getElementById(to_id);
+   var new_board = document.getElementById("ch_b|" + to_id);
 
    this_board.style.display = "none";
    new_board.style.display = "table";
