@@ -196,17 +196,30 @@ function switch_board(game_name, to_id) {
 
 function adjacent_board(game_name, direction) {
    var this_board = current_board(game_name);
+   var id_split = link_id_names(this_board.id);
+
    var chessboards = document.querySelectorAll(".polishboard");
    var previous_board = "";
    var next_board = "";
+
 
    for ( var i = 0; i < chessboards.length; i++ ) {
       if ( chessboards[i].id == this_board.id ) {
          if ( i-1 >= 0 ) {
             previous_board = chessboards[i-1];
+            prev_split = link_id_names(chessboards[i-1].id);
+            if ( id_split[1] != prev_split[1] ) {
+               // Not the same game names
+               prev_split = '';
+            }
          } 
          if ( i+1 < chessboards.length ) {
-            next_board = chessboards[i+1];     
+            next_board = chessboards[i+1]; 
+            next_split = link_id_names(chessboards[i+1].id);
+            if ( id_split[1] != name_split[1] ) {
+               // Not the same game names
+               next_split = '';
+            }
          }
          break;
       }
