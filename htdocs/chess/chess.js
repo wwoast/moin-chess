@@ -97,7 +97,7 @@ function create_menu_listeners() {
    // Look at all link ids. Anything with a game name in it gets a
    // switch_board click listener. Anything with a previous_move or
    // next_move in it gets a adjacent_board click listener.
-   links = document.getElementsByClassName('menuitem');
+   links = document.getElementsByClassName('moveitem');
 
    // NOTE: Function argument inside an anonymous function will act 
    // on the click, rather than firing on the immediate page loading.

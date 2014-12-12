@@ -134,7 +134,7 @@ class Parser:
 	# Write the game move select menu first. Like all link ids, have a 
 	# pipe-delimited head, and an underscore-delimited foot, for js 
 	# parsing consistency
-	menu = '<div class="movemenu"><a id="ch_pm|' + self.name + '_" href="#jslink">Previous</a> | <a id="ch_nm|' + self.name + '_" href="#jslink">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
+	menu = '<div class="movemenu"><a class="moveitem" id="ch_pm|' + self.name + '_" href="#jslink">Previous</a> | <a class="moveitem" id="ch_nm|' + self.name + '_" href="#jslink">Next</a> &nbsp;&nbsp;&nbsp;<b>&mdash; &mdash;</b>'
 	self.request.write(formatter.rawHTML(menu))
 
 	# Take self.game and loop through the different moves. Reconstruct 
