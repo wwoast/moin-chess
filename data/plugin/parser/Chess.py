@@ -155,14 +155,14 @@ class Parser:
 	   if ( i % 2 == 0 ):
 	      self.request.write(formatter.rawHTML('<li>'))
 	      board_switch = self.name + "_" + str(turn) + "b"
-	      move_link = '<a href="#jslink" id="ch_m|' + board_switch + '">' + move + '</a> &nbsp;'
+	      move_link = '<p class="moveitem" id="ch_m|' + board_switch + '">' + move + '</p> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
 
 	   else:
 	      board_switch = self.name + "_" + str(turn+1) + "w"
-	      move_link = '<a href="#jslink" id="ch_m|' + board_switch + '">' + move + '</a>'
+	      move_link = '<p class="moveitem" id="ch_m|' + board_switch + '">' + move + '</p>'
 	      turn = turn + 1
 	      self.request.write(formatter.rawHTML(move_link))
 	      self.request.write(formatter.rawHTML('</li>'))

@@ -72,5 +72,9 @@ div.movelist {
 div.movelist ol {
    margin: 0;
 }
-div.movelist ol li {
+div.movelist p.moveitem {
+   /* Faking links b/c anchor tags in a multicolumn CSS div 
+      causes reflow when clicked. Super annoying! */
+   display: inline;
+   cursor: pointer;   /* The hand */
 }
