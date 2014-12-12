@@ -67,20 +67,50 @@ function create_rank(board, rank) {
 }
 
 
+function link_id_names(lid) {
+   // Standard format: First is the link type: ch_m for a move,
+   // ch_pm for "Previous" button, and ch_nm for "Next" button.
+   // Then a | and the name of the game, followed by an _. Finally,
+   // the number of the move and who's going. Return an array with
+   // all of the relevant values that will match board/link ids.
+   var tmp = lid.split("|");
+   var type = tmp.shift(1);
+   tmp = tmp.join("|").split("_");
+   var turn = tmp.pop();
+   var game_name = tmp.join("_");
+   var game_move = game_name + "_" + turn;  
+   return [ type, game_name, game_move ];
+}
+
+
 function create_menu_listeners() {
    // Look at all link ids. Anything with a game name in it gets a
    // switch_board click listener. Anything with a previous_move or
    // next_move in it gets a adjacent_board click listener.
+   links = document.getElementsByTagName('a');
 
-   // TODO: Use consistent easy-to-search prefixes
-   
-   // Finally, add event listeners for any menu link buttons. Function
-   // argument inside an anonymous function will act on the click,
-   // rather than firing on the immediate page loading.
-   document.getElementById('previous_move').addEventListener('click', function() {
-      adjacent_board('previous')});
-   document.getElementById('next_move').addEventListener('click', function() {
-      adjacent_board('next')});
+   // NOTE: Function argument inside an anonymous function will act 
+   // on the click, rather than firing on the immediate page loading.
+   for ( var i = 0; i < links.length; i++ ) {
+      if ( link_id.indexOf("ch_") == 0 ) {
+         id_splits = link_id_names(link_id);
+         if ( id_splits[0] == "ch_m" ) {
+            // This is a chess move link
+            links[i].addEventListener('click', function() {
+               switch_board(id_splits[1], id_splits[2])});
+         }
+         if ( id_splits[0] == "ch_pm" ) {
+            // This is a previous move link
+            links[i].addEventListener('click', function() {
+               adjacent_board(id_splits[1], "previous")});
+         }
+         if ( id_splits[0] == "ch_nm" ) {
+            // This is a next move link
+            links[i].addEventListener('click', function() {
+               adjacent_board(id_splits[1], "next")});
+         }
+      }
+   }
 }
 
 
@@ -115,10 +145,29 @@ $(function() {
       chessboards[i].innerHTML = output[id].innerHTML;
       chessboards[i].className = "polishboard";
    }
+
+   // And now that the boards are drawn, draw menus using the game
+   // id name from the first chessboard
+   createMenuListeners();
 });
 
 
-function switch_board(this_board, to_id) {
+function current_board(game_name) {
+   // Given a game name, find the board that's currently being displayed
+   var chessboards = document.querySelectorAll(".polishboard");
+   for ( var i = 0 ; i < chessboards.length; i++ ) {
+      var board = chessboards[i];
+      if ( board.id.indexOf(game_name) >= 0 && 
+           board.style.display == "table" ) {
+         return board;
+      }
+   }
+}
+
+
+function switch_board(game_name, to_id) {
+   // Used for the individual chess moves, to allow the board to be changed
+   var this_board = current_board(game_name);
    var new_board = document.getElementById(to_id);
 
    this_board.style.display = "none";
@@ -126,7 +175,8 @@ function switch_board(this_board, to_id) {
 }
 
 
-function adjacent_board(this_board, direction) {
+function adjacent_board(game_name, direction) {
+   var this_board = current_board(game_name);
    var chessboards = document.querySelectorAll(".polishboard");
    var previous_board = "";
    var next_board = "";
