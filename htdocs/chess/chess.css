@@ -62,16 +62,15 @@ div.movelist {
    -webkit-column-count: 8;
    -moz-column-count: 8;
    column-count: 8;
-   -webkit-column-gap: 10px;
-   -moz-column-gap: 10px;
-   column-gap: 10px;
+   -webkit-column-gap: 1em;
+   -moz-column-gap: 1em;
+   column-gap: 1em;
    padding: 0 0 0 0;
-   min-width: 300px;
-   max-width: 90%;
    font-size: 11pt;
+   line-height: 1.4;
 }
 div.movelist ol {
-   display: block;
-   padding-left: 1.8em;
-   margin: 0 0 0 0;
+   margin: 0;
+}
+div.movelist ol li {
 }
