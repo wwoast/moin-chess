@@ -10,8 +10,8 @@
  * further inserts are unnecessary.
  */
 
-// Change this every time the Wiki is upgraded
-var moin_chess_root = "/moin_static194/chess/"
+// Expects moin_chess_root in the current DOM, from the plugin output
+// var moin_chess_root = "/moin_static194/chess/"
 
 var style = document.createElement('link');
 style.rel = "stylesheet";
