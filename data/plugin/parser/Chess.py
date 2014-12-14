@@ -186,6 +186,7 @@ class Parser:
 	if ( self.mode == "Board" ):
 	   [ show_turn, to_move ] = self.position.split('-')
 	   node = self.game
+	   board_html = ""
 	   turn = 0
 	   i = 0
 	   while node.variations:
@@ -193,13 +194,13 @@ class Parser:
 	      node = next_node
 	      if ( i % 2 == 0 ):   # White to move
 	         turn = turn + 1
-	         if ( turn == show_turn ) and ( to_move == "White" ):
+	         if ( turn == int(show_turn)) and ( to_move == "White" ):
 	            board_id = self.name + "_" + str(turn) + "w"
 	            board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 	            break
 
 	      else:                # Black to move
-	         if ( turn == show_turn ) and ( to_move == "Black" ):
+	         if ( turn == int(show_turn)) and ( to_move == "Black" ):
 	            board_id = self.name + "_" + str(turn) + "b"
 	            board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 	            break
@@ -207,9 +208,11 @@ class Parser:
 	      i = i+1
 
 	   # Last board b/c the variations loop misses it
-	   if ( turn == show_turn ):
+	   if ( turn == int(show_turn)):
 	      board_id = self.name + "_" + str(turn) + "w"
 	      board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+
+	   self.request.write(formatter.rawHTML(board_html))
 	   return
 
 
