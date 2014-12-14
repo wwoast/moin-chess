@@ -209,10 +209,14 @@ function update_focal_move(game_name, to_id) {
    // is the black turn pointer's link text, and vice versa
    var white_move = document.getElementById("ch_m|" + black);
    var black_move = document.getElementById("ch_m|" + white);
-   var white_text = black_turn + ". " + white_move.innerHTML;
+   var white_text = "&mdash;";
    var black_text = "&mdash;";
+   // First move is dash-dash unless non-null
+   if ( white_move != null ) {
+      white_text = black_turn + ". " + white_move.innerHTML;
+   }
    // If game ended with a white move, replace with mdash
-   if ( black_move != null ) {
+   if ( black_move != null && white_move != null ) {
       black_text = black_move.innerHTML;
    }
 
