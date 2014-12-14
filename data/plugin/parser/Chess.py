@@ -53,6 +53,7 @@ class Parser:
                                  # {'format_args': 'a b c '}	
 	self.error = ""          # Error message to print if necessary        
 	self.game = ""           # The chess.pgn game object
+	self.position = ""	 # Starting position to display
 
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
@@ -60,7 +61,7 @@ class Parser:
 	self.mode = self.inputs[0]
 	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
-	# TODO: invalid characters in the game name!?
+	# TODO: INPUT SANITIZATION (self.mode, self.name)
         self.cache = caching.CacheEntry(self.request, "chess", self.name, scope='wiki')
 
 	# Game tags:
@@ -115,12 +116,16 @@ class Parser:
               vfh = StringIO(self.cache.read())
               self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
 
+	      self.position = self.raw
+	      # TODO: Sanitization
+
            except caching.CacheError as e:
 	      # Game hasn't been defined yet. For board references, print err
 	      self.error = "Tag error: No {{{#!Chess Game %s}}} defined." % self.name
 
 	   except ValueError as e:
-	      # Error importing PGN moves from a file (that never should have been written)
+	      # Error importing PGN moves from a file 
+	      # (that never should have been written)
 	      self.error = "PGN error in %s: %s" % ( self.name, e) 
 
 	   finally:
@@ -173,15 +178,40 @@ class Parser:
 	self.request.write(formatter.rawHTML('</ol></div>'))
 
 
-    def draw_board(self, formatter, current_move=""):
-	"""Given self.game and current_move, draw the current chess board.
-           All {{{#!Chess Board }}} tags have a current move and will only show
+    def draw_board(self, formatter):
+	"""Given self.game and self.position, draw the current chess board.
+           All {{{#!Chess Board }}} tags have a position and will only show
            a single board with that move. Otherwise, display the opening board,
            and hide all the other divs until they're ready to be shown."""
-	# if ( current_move == "" ):
-	   # current_move = self.position
-	   # TODO: Only draw one board
-	   # return
+	if ( self.mode == "Board" ):
+	   [ show_turn, to_move ] = self.position.split('-')
+	   node = self.game
+	   turn = 0
+	   i = 0
+	   while node.variations:
+	      next_node = node.variation(0)
+	      node = next_node
+	      if ( i % 2 == 0 ):   # White to move
+	         turn = turn + 1
+	         if ( turn == show_turn ) and ( to_move == "White" ):
+	            board_id = self.name + "_" + str(turn) + "w"
+	            board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+	            break
+
+	      else:                # Black to move
+	         if ( turn == show_turn ) and ( to_move == "Black" ):
+	            board_id = self.name + "_" + str(turn) + "b"
+	            board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+	            break
+
+	      i = i+1
+
+	   # Last board b/c the variations loop misses it
+	   if ( turn == show_turn ):
+	      board_id = self.name + "_" + str(turn) + "w"
+	      board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+	   return
+
 
 	# Otherwise, grab all boards and display the initial board
 	boards = []
