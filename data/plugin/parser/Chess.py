@@ -91,7 +91,8 @@ class Parser:
               vfh = StringIO(' '.join(moves))
 	      self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
 	      exporter = chess.pgn.StringExporter()
-	      moves = str(self.game.export(exporter, headers=False))
+	      self.game.export(exporter, headers=False)
+              moves = str(exporter)
 	      self.cache.write(moves)
 
 	   except ValueError as e:
