@@ -2,11 +2,10 @@ div.chess-container {
    min-width: 600px;
    max-width: 90%;
 }
-div.chess-container div.polishboard:first-child {
-   display: table;
-}
 div.chessboard, div.polishboard {
    display: none;   /* Changes to table later */
+                    /* Note: :first-child doesn't change the DOM value
+                       so I need to set it from javascript manually */
    border: solid 1px;
    min-width: 300px;
    margin-bottom: 5px;
@@ -14,13 +13,14 @@ div.chessboard, div.polishboard {
 div.rank {
    display: table;
    min-width: 300px;
+   height: 12.5%;
 }
 div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
    display: table-cell;
-   width: 40px;
-   height: 40px;
+   width: 2ex;
+   height: 2ex;
    text-align: center;
-   vertical-align: middle;
+   vertical-align: top;   /* Vertical spacing in the type will center it */
    margin: 0 0 0 0;
    padding: 0 0 0 0;
    border: solid 1px black;
