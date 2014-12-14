@@ -26,9 +26,12 @@ behavior.type = "text/javascript";
 behavior.src = moin_chess_root + "chess.js";
 
 // Have we loaded the Chess JS? If so, don't load any of these 
-// resources a second time!
+// resources a second time! Also, try and insert zepto to load
+// before anything else
 if ( ! behavior.isEqualNode(document.head.lastChild)) {
+   var first = document.getElementsByTagName('script')[0];
+   first.parentNode.insertBefore(zeptojs, first);
+
    document.head.appendChild(style);
-   document.head.appendChild(zeptojs);
    document.head.appendChild(behavior);
 }

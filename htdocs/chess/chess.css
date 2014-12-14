@@ -13,7 +13,6 @@ div.chessboard, div.polishboard {
 div.rank {
    display: table;
    min-width: 300px;
-   height: 12.5%;
 }
 div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
    display: table-cell;
@@ -29,10 +28,12 @@ div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
 div.bs, div.bs_bp, div.bs_wp {
    background-color: #666666;
    /* background-color: #2b2bff; // blue */
+   /* background-color: #666666; // dark gray */
 }
 div.ws, div.ws_bp, div.ws_wp {
    background-color: #bbbbbb;
    /* background-color: #49ff49; // green */
+   /* background-color: #bbbbbb; // light gray */
 }
 div.bs_bp, div.ws_bp {
    color: black;
