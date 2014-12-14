@@ -60,6 +60,7 @@ class Parser:
 	self.mode = self.inputs[0]
 	self.name = self.inputs[1]
 	# Initiate the Moin cache entry object
+	# TODO: invalid characters in the game name!?
         self.cache = caching.CacheEntry(self.request, "chess", self.name, scope='wiki')
 
 	# Game tags:
@@ -80,7 +81,8 @@ class Parser:
 	      self.cache.close()
 
            except caching.CacheError as e:
-	      self.error = "Cache error: %s" % e
+	      # Don't print errors when adding a new game
+	      # self.error = "Cache error: %s" % e
 
 	      # Game hasn't been defined yet. Write a PGN to the cache
               # In a "Game" tag, other values are PGN moves. Space and new-line
@@ -181,7 +183,7 @@ class Parser:
 	   # TODO: Only draw one board
 	   # return
 
-	# Otherwise, grab all boards
+	# Otherwise, grab all boards and display the initial board
 	boards = []
 	node = self.game
         while node.variations:
@@ -220,5 +222,8 @@ class Parser:
 	   self.request.write(formatter.rawHTML(tag))
 	   self.request.write(formatter.rawHTML('<div class="chess-container">'))
 	   self.draw_board(formatter)
-	   self.draw_menu(formatter)
+	   if ( self.mode == "Game" ):
+	      # Only full game mode gets the menus
+	      self.draw_menu(formatter)
+
 	   self.request.write(formatter.rawHTML('</div>'))
