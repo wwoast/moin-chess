@@ -17,8 +17,8 @@ div.rank {
 }
 div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
    display: table-cell;
-   width: 1.1em;
-   height: 1.1em;
+   width: 40px;
+   height: 40px;
    text-align: center;
    vertical-align: middle;
    margin: 0 0 0 0;
