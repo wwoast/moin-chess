@@ -27,13 +27,9 @@ div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
 }
 div.bs, div.bs_bp, div.bs_wp {
    background-color: #666666;
-   /* background-color: #2b2bff; // blue */
-   /* background-color: #666666; // dark gray */
 }
 div.ws, div.ws_bp, div.ws_wp {
    background-color: #bbbbbb;
-   /* background-color: #49ff49; // green */
-   /* background-color: #bbbbbb; // light gray */
 }
 div.bs_bp, div.ws_bp {
    color: black;
@@ -59,7 +55,6 @@ div.movemenu {
    font-size: 20pt;
 }
 div.movelist {
-   /* TODO: media queries for different screen sizes */
    -webkit-column-count: 8;
    -moz-column-count: 8;
    column-count: 8;
@@ -78,4 +73,7 @@ div.movelist p.moveitem {
       causes reflow when clicked. Super annoying! */
    display: inline;
    cursor: pointer;   /* The hand */
+}
+div.movelist p.focalwhite, div.movelist p.focalblack {
+   display: inline;
 }
