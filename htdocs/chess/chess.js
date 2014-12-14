@@ -186,14 +186,38 @@ function current_board(game_name) {
 
 function update_focal_move(game_name, to_id) {
    // Update the focal move text. TODO: make clickable
-   var move = link_id_names(to_id)[2];
-   var white = move.substr(0, move.length-1) + "w";
-   var black = move.substr(0, move.length-1) + "b";
+   var move = to_id.split("_").pop();
+   var color = move.split('').pop();
+   var move_n = Number(move.replace(color, ''));
+   var white_turn = move_n;
+   var black_turn = move_n;   
+
+   if ( color == "b" ) {
+      white_turn = white_turn + 1;
+   }
+   if ( color == "w" ) {
+      black_turn = black_turn - 1;
+   }
+
+   var white = game_name + "_" + white_turn + "w";
+   var black = game_name + "_" + black_turn + "b";
 
    var focal_white = document.getElementById(game_name + "_white");
    var focal_black = document.getElementById(game_name + "_black");
-   focal_white.innerHTML = document.getElementById("ch_m|" + white).innerHTML;
-   focal_black.innerHTML = document.getElementById("ch_m|" + black).innerHTML;
+
+   // Board link states point at the next person's turn, so the white move
+   // is the black turn pointer's link text, and vice versa
+   var white_move = document.getElementById("ch_m|" + black);
+   var black_move = document.getElementById("ch_m|" + white);
+   var white_text = black_turn + ". " + white_move.innerHTML;
+   var black_text = "&mdash;";
+   // If game ended with a white move, replace with mdash
+   if ( black_move != null ) {
+      black_text = black_move.innerHTML;
+   }
+
+   focal_white.innerHTML = white_text;
+   focal_black.innerHTML = black_text;
 }
 
 
@@ -216,13 +240,14 @@ function adjacent_board(game_name, direction) {
    var chessboards = document.querySelectorAll(".polishboard");
    var previous_board = "";
    var next_board = "";
-
+   var prev_split = "";
+   var next_split = "";
 
    for ( var i = 0; i < chessboards.length; i++ ) {
       if ( chessboards[i].id == this_board.id ) {
          if ( i-1 >= 0 ) {
             previous_board = chessboards[i-1];
-            var prev_split = link_id_names(chessboards[i-1].id);
+            prev_split = link_id_names(chessboards[i-1].id);
             if ( id_split[1] != prev_split[1] ) {
                // Not the same game names
                previous_board = '';
@@ -230,7 +255,7 @@ function adjacent_board(game_name, direction) {
          } 
          if ( i+1 < chessboards.length ) {
             next_board = chessboards[i+1]; 
-            var next_split = link_id_names(chessboards[i+1].id);
+            next_split = link_id_names(chessboards[i+1].id);
             if ( id_split[1] != next_split[1] ) {
                // Not the same game names
                next_board = '';
@@ -243,9 +268,11 @@ function adjacent_board(game_name, direction) {
    if ( direction == "previous" && previous_board != "" ) {
       this_board.style.display = "none";
       previous_board.style.display = "table";
+      update_focal_move(game_name, prev_split[2]); 
    }
    if ( direction == "next" && next_board != "" ) {
       this_board.style.display = "none";
       next_board.style.display = "table";
+      update_focal_move(game_name, next_split[2]); 
    }
 }
