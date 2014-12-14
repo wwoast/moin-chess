@@ -250,9 +250,10 @@ class Parser:
 	   # all themes supported moin-chess. :(
 	   # TODO: If STUB_SCRIPT doesn't exist, write a new one with 
 	   # the correct paths in place to the other files
-	   path = '<script type="text/javascript">var moin_chess_root = "'+url_prefix_static+'"</script>'
+	   path = '<script type="text/javascript">var moin_chess_root = "'+url_prefix_static+'/chess/"</script>'
 	   tag = '<script type="text/javascript" src="' + STUB_SCRIPT + '"></script>'
 
+	   self.request.write(formatter.rawHTML(path))
 	   self.request.write(formatter.rawHTML(tag))
 	   self.request.write(formatter.rawHTML('<div class="chess-container">'))
 	   self.draw_board(formatter)
