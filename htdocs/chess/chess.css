@@ -54,6 +54,9 @@ div.movemenu, div.movelist {
 div.movemenu {
    font-size: 20pt;
 }
+div.movemenu p.focalwhite, div.movemenu p.focalblack {
+   display: inline;
+}
 div.movelist {
    -webkit-column-count: 8;
    -moz-column-count: 8;
@@ -73,7 +76,4 @@ div.movelist p.moveitem {
       causes reflow when clicked. Super annoying! */
    display: inline;
    cursor: pointer;   /* The hand */
-}
-div.movelist p.focalwhite, div.movelist p.focalblack {
-   display: inline;
 }

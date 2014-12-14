@@ -184,6 +184,19 @@ function current_board(game_name) {
 }
 
 
+function update_focal_move(game_name, to_id) {
+   // Update the focal move text. TODO: make clickable
+   var move = link_id_names(to_id)[2];
+   var white = move.substr(0, move.length-1) + "w";
+   var black = move.substr(0, move.length-1) + "b";
+
+   var focal_white = document.getElementById(game_name + "_white");
+   var focal_black = document.getElementById(game_name + "_black");
+   focal_white.innerHTML = document.getElementById("ch_m|" + white).innerHTML;
+   focal_black.innerHTML = document.getElementById("ch_m|" + black).innerHTML;
+}
+
+
 function switch_board(game_name, to_id) {
    // Used for the individual chess moves, to allow the board to be changed
    var this_board = current_board(game_name);
@@ -191,6 +204,8 @@ function switch_board(game_name, to_id) {
 
    this_board.style.display = "none";
    new_board.style.display = "table";
+
+   update_focal_move(game_name, to_id); 
 }
 
 
