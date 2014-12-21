@@ -40,14 +40,17 @@ from MoinMoin.config import url_prefix_static
 from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
 
-MAX_PLAYS = 1000		# Longest recorded game is 269 moves
 STUB_SCRIPT = url_prefix_static + "/chess/head.js"
-
+MODE_LEN = 16
+NAME_LEN = 128
+RAW_LEN = 32768
+MAX_PLAYS = 1000		# Longest recorded game is 269 moves
 
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
     def __init__(self, raw, request, **kw):
-        self.raw = raw           # words on each line inbetween the {{{ and }}}
+        # words on each line inbetween the {{{ and }}}
+        self.raw = raw[0:RAW_LEN]
         self.request = request   # request is the HTTPRequest object
         self.kw = kw             # for example: {{{!# HelloWorld a b c ...
                                  # {'format_args': 'a b c '}	
@@ -58,8 +61,8 @@ class Parser:
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
 	self.inputs = self.kw['format_args'].split(' ')
-	self.mode = self.inputs[0]
-	self.name = self.inputs[1]
+	self.mode = self.inputs[0][0:MODE_LEN]
+	self.name = self.sanitize_filename(self.inputs[1][0:NAME_LEN])
 	# Initiate the Moin cache entry object
 	# TODO: INPUT SANITIZATION (self.mode, self.name)
         self.cache = caching.CacheEntry(self.request, "chess", self.name, scope='wiki')
@@ -133,6 +136,15 @@ class Parser:
 
 	else:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
+
+
+    def sanitize_filename(self, filename):
+	"""Given basic ASCII characters, remove any characters we don't want
+	in a cachefile. Basically, permit digits, and a handful of symbols"""
+	validChars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+
+	cleaned = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore')
+	return ''.join(c for c in cleaned if c in validChars
 
 
     def draw_menu(self, formatter):
