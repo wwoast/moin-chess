@@ -191,44 +191,44 @@ class Parser:
 
 
     def draw_board(self, formatter):
-	"""Given self.game and self.position, draw the current chess board.
-           All {{{#!Chess Board }}} tags have a position and will only show
-           a single board with that move. Otherwise, display the opening board,
-           and hide all the other divs until they're ready to be shown."""
-	if ( self.mode == "Board" ):
-	   [ show_turn, to_move ] = self.position.split('-')
-	   node = self.game
-	   board_html = ""
-	   turn = 0
-	   i = 0
-	   while node.variations:
-	      next_node = node.variation(0)
-	      node = next_node
-	      if ( i % 2 == 0 ):   # White to move
-	         turn = turn + 1
-	         if ( turn == int(show_turn)) and ( to_move == "White" ):
-	            board_id = self.name + "_" + str(turn) + "w"
-	            board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
-	            break
+	"""Given self.game and self.position, draw a single chess board. This
+	   This function parses {{{#!Chess Board }}} tags."""
+	[ show_turn, to_move ] = self.position.split('-')
+	node = self.game
+	board_html = ""
+	turn = 0
+	i = 0
+	while node.variations:
+	   next_node = node.variation(0)
+	   node = next_node
+	   if ( i % 2 == 0 ):   # White to move
+	      turn = turn + 1
+	      if ( turn == int(show_turn)) and ( to_move == "White" ):
+	         board_id = self.name + "_" + str(turn) + "w"
+	         board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+	         break
 
-	      else:                # Black to move
-	         if ( turn == int(show_turn)) and ( to_move == "Black" ):
-	            board_id = self.name + "_" + str(turn) + "b"
-	            board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
-	            break
+	   else:                # Black to move
+	      if ( turn == int(show_turn)) and ( to_move == "Black" ):
+	         board_id = self.name + "_" + str(turn) + "b"
+	         board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+	         break
 
-	      i = i+1
+	   i = i+1
 
-	   # Last board b/c the variations loop misses it
-	   if ( turn == int(show_turn)):
-	      board_id = self.name + "_" + str(turn) + "w"
-	      board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
+	# Last board b/c the variations loop misses it
+	if ( turn == int(show_turn)):
+	   board_id = self.name + "_" + str(turn) + "w"
+	   board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 
-	   self.request.write(formatter.rawHTML(board_html))
-	   return
+	self.request.write(formatter.rawHTML(board_html))
 
 
-	# Otherwise, grab all boards and display the initial board
+    def draw_game(self, formatter):
+	"""All {{{#!Chess Game }}} tags follow this logic. Draw a game board
+	   for every single position available, and insert them into the page.
+	   Then, include a menu for switching between the game boards.
+           Hide all game divs until they're ready to be shown."""
 	boards = []
 	node = self.game
         while node.variations:
@@ -268,9 +268,12 @@ class Parser:
 	   self.request.write(formatter.rawHTML(path))
 	   self.request.write(formatter.rawHTML(tag))
 	   self.request.write(formatter.rawHTML('<div class="chess-container">'))
-	   self.draw_board(formatter)
+	   if ( self.mode == "Board" ):
+ 	      self.draw_board(formatter)
+
 	   if ( self.mode == "Game" ):
 	      # Only full game mode gets the menus
+ 	      self.draw_game(formatter)
 	      self.draw_menu(formatter)
 
 	   self.request.write(formatter.rawHTML('</div>'))
