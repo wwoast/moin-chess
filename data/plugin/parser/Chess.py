@@ -65,8 +65,8 @@ class Parser:
 
 	# Most arguments to a chess tag: 4 (mode, name, starting position, ??)
 	self.inputs = self.kw['format_args'].split(' ')[0:4]
-	if ( len(self.inputs) < 1 ):
-	   self.error = 'Tag error: Chess tag needs at least one argument'
+	if ( len(self.inputs) < 2 ):
+	   self.error = 'Tag error: Chess tag needs a Mode and a Game ID.'
 	   return
 
 	self.mode = self.inputs[0][0:MODE_LEN]
