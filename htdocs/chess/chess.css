@@ -24,6 +24,7 @@ div.bs, div.ws, div.bs_bp, div.bs_wp, div.ws_bp, div.ws_wp {
    padding: 0 0 0 0;
    border: solid 1px black;
    font-size: 36pt;
+   line-height: 2.3ex;   /* Ensure standard height regardless of char height */
 }
 div.bs, div.bs_bp, div.bs_wp {
    background-color: #666666;

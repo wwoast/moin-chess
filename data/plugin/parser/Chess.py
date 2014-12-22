@@ -102,7 +102,7 @@ class Parser:
 	      self.cache.write(moves)
 
 	   except ValueError as e:
-	      # Error when importing the PGN moves from the wiki {{{ }}} or a file
+	      # Error when importing the PGN moves from wiki {{{ }}} or a file
 	      self.error = "PGN error in %s: %s" % ( self.name, e)
 
 	   except IOError as e:
