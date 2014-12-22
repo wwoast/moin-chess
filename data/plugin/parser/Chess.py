@@ -39,12 +39,16 @@ from MoinMoin.parser import text_moin_wiki
 from MoinMoin.config import url_prefix_static
 from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
+from unicodedata import normalize
+from string import ascii_letters, digits
+
 
 STUB_SCRIPT = url_prefix_static + "/chess/head.js"
 MODE_LEN = 16		# Game mode str len, and starting position str len
 NAME_LEN = 128
 RAW_LEN = 32768
 MAX_PLAYS = 1000	# Longest recorded game is 269 moves
+
 
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
@@ -62,7 +66,7 @@ class Parser:
 	# The moves may be in PGN format, readable by chess.pgn
 	self.inputs = self.kw['format_args'].split(' ')
 	if ( len(self.inputs) < 1 ):
-	   self.error = "Tag error: Chess tag needs at least one argument"
+	   self.error = 'Tag error: Chess tag needs at least one argument'
 	   return
 
 	self.mode = self.inputs[0][0:MODE_LEN]
@@ -148,9 +152,9 @@ class Parser:
     def sanitize_filename(self, filename):
 	"""Given basic ASCII characters, remove any characters we don't want
 	in a cachefile. Basically, permit digits, and a handful of symbols"""
-	validChars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+	validChars = "-_.() %s%s" % (ascii_letters, digits)
 
-	cleaned = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore')
+	cleaned = normalize('NFKD', filename).encode('ASCII', 'ignore')
 	return ''.join(c for c in cleaned if c in validChars)
 
 
