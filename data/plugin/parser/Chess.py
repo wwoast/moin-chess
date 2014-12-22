@@ -51,7 +51,8 @@ MAX_PLAYS = 1000	# Longest recorded game is 269 moves
 
 
 class Parser:
-    """Insert chess boards into MoinMoin and write about chess games"""
+    """Insert chess boards into MoinMoin and write about chess games.
+       Moves must be in PGN format, readable by chess.pgn"""
     def __init__(self, raw, request, **kw):
         # raw: words on each line inbetween the {{{ and }}}
         self.raw = raw[0:RAW_LEN]
@@ -62,9 +63,8 @@ class Parser:
 	self.game = ""           # The chess.pgn game object
 	self.position = ""	 # Starting position to display
 
-	# The board can be constructed empty-form, or from a list of moves.
-	# The moves may be in PGN format, readable by chess.pgn
-	self.inputs = self.kw['format_args'].split(' ')
+	# Most arguments to a chess tag: 4 (mode, name, starting position, ??)
+	self.inputs = self.kw['format_args'].split(' ')[0:4]
 	if ( len(self.inputs) < 1 ):
 	   self.error = 'Tag error: Chess tag needs at least one argument'
 	   return
