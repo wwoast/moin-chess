@@ -151,7 +151,7 @@ class Parser:
 	validChars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 
 	cleaned = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore')
-	return ''.join(c for c in cleaned if c in validChars
+	return ''.join(c for c in cleaned if c in validChars)
 
 
     def draw_menu(self, formatter):
