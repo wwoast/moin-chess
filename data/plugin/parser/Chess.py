@@ -41,15 +41,15 @@ from StringIO import StringIO   # read_game can ocur from a cache file this way
 import chess.pgn
 
 STUB_SCRIPT = url_prefix_static + "/chess/head.js"
-MODE_LEN = 16
+MODE_LEN = 16		# Game mode str len, and starting position str len
 NAME_LEN = 128
 RAW_LEN = 32768
-MAX_PLAYS = 1000		# Longest recorded game is 269 moves
+MAX_PLAYS = 1000	# Longest recorded game is 269 moves
 
 class Parser:
     """Insert chess boards into MoinMoin and write about chess games"""
     def __init__(self, raw, request, **kw):
-        # words on each line inbetween the {{{ and }}}
+        # raw: words on each line inbetween the {{{ and }}}
         self.raw = raw[0:RAW_LEN]
         self.request = request   # request is the HTTPRequest object
         self.kw = kw             # for example: {{{!# HelloWorld a b c ...
@@ -61,10 +61,17 @@ class Parser:
 	# The board can be constructed empty-form, or from a list of moves.
 	# The moves may be in PGN format, readable by chess.pgn
 	self.inputs = self.kw['format_args'].split(' ')
+	if ( len(self.inputs) < 1 ):
+	   self.error = "Tag error: Chess tag needs at least one argument"
+	   return
+
 	self.mode = self.inputs[0][0:MODE_LEN]
 	self.name = self.sanitize_filename(self.inputs[1][0:NAME_LEN])
+
+	if ( len(self.inputs) > 2):
+	   self.position = self.inputs[2][0:MODE_LEN]
+
 	# Initiate the Moin cache entry object
-	# TODO: INPUT SANITIZATION (self.mode, self.name)
         self.cache = caching.CacheEntry(self.request, "chess", self.name, scope='wiki')
 
 	# Game tags:
@@ -260,8 +267,6 @@ class Parser:
 	else:
 	   # Sadly no better way to include these styles unless
 	   # all themes supported moin-chess. :(
-	   # TODO: If STUB_SCRIPT doesn't exist, write a new one with 
-	   # the correct paths in place to the other files
 	   path = '<script type="text/javascript">var moin_chess_root = "'+url_prefix_static+'/chess/"</script>'
 	   tag = '<script type="text/javascript" src="' + STUB_SCRIPT + '"></script>'
 
