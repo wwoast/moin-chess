@@ -79,8 +79,6 @@ class Parser:
         self.cache = caching.CacheEntry(self.request, "chess", self.name, scope='wiki')
 
 	# Game tags:
-	# If the name of the game exists, read a cachefile. Otherwise, create a
-	# new one, containing the PGN of the game.
 	if ( self.mode == "Game" ):
 	   # Try to read from an existing cachefile
 	   # If cache read turns up empty, make a new one with the PGN
@@ -90,9 +88,12 @@ class Parser:
               vfh = StringIO(self.cache.read())
               self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
 
-	      # TODO: If the cache already exists, verify moves are the same.
-	      # If they are, print an error message and the link to the page
-	      # where the game was first defined.
+	      # If the cache already exists, verify moves are the same.
+	      # If they're not the same, print an error message.
+	      # TODO: make sure this doesn't slow down page loading 
+	      if ( ! self.equivalent_games() ):
+	         self.error = "Cache error: %s already exists. Choose a new Game ID." % self.name
+
 	      self.cache.close()
 
            except caching.CacheError as e:
@@ -147,6 +148,27 @@ class Parser:
 
 	else:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
+
+
+    def equivalent_games(self):
+	"""Is the game in the wikicache the same as the one being defined?"""
+   	moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
+	vfh = StringIO(' '.join(moves))
+	game_raw = chess.pgn.read_game(vfh)
+
+	# Compare game_raw with self.game from the cache
+	export_cache = chess.pgn.StringExporter()
+	export_raw = chess.pgn.StringExporter()
+	
+	self.game.export(export_cache, headers=False)			
+	game_raw.export(export_raw, headers=False)
+	
+	str_cache = str(export_cache)
+	str_raw = str(export_raw)
+	if ( str_cache == str_raw ):
+	   return true
+	else:
+	   return false	
 
 
     def sanitize_filename(self, filename):
