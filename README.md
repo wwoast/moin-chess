@@ -16,7 +16,7 @@ later version, the same as MoinMoin itself.
 
 ## Features
 * Polished-looking chessboards in pure HTML
- * Uses your native browser's font to display chess pieces
+ * Uses your browser's native font to display chess pieces
 * Menus and page layouts designed for paper-printing
 
 
