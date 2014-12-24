@@ -49,7 +49,7 @@ elsewhere in the wiki. New versions of Moin Chess may remove this limitation.
 
 ## Installation
 Moin-Chess is tested on Python 2.7 on Debian wheezy. It comes bundled with 
-zepto.js and requires MoinMoin libraries as well as python-chess.
+`zepto.js` and requires MoinMoin libraries as well as `python-chess`.
 
 * Install python-chess (tested on 0.60 and later)
  * `pip install python-chess` or `apt-get install python-chess`
@@ -59,19 +59,20 @@ zepto.js and requires MoinMoin libraries as well as python-chess.
 * Copy the tarball to your wiki's root directory
 * Untar the contents
 * Validate that the following files are owned by your webserver:
- * $MOIN/data/plugin/parser/Chess.py
- * $MOIN/htdocs/chess/*
+ * `$MOIN/data/plugin/parser/Chess.py`
+ * `$MOIN/htdocs/chess/*`
 * Restart MoinMoin's WSGI/uwsgi service
 
 
 ## Administration
 When a new "Chess Game" tag is parsed, it creates an entry in the MoinMoin
-cache, stored under $MOIN/data/cache/wikiconfig/chess. As long as this cache
+cache, stored under `$MOIN/data/cache/wikiconfig/chess`. As long as this cache
 file exists, the contents of the Chess Game tag become "secondary" to the
 cached version.
 
-Server admins may delete these files, in case there are problems caused by
-cached chess games in the Wiki.
+Server admins may delete these files freely, in case there are problems caused 
+by cached chess games in the Wiki. When the "Chess Game" tag is reloaded, it
+will recreate the game's Wiki cache entry.
 
 
 ## Upcoming Features
