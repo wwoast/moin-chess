@@ -9,7 +9,7 @@ Moin-Chess is a Wiki parser for MoinMoin that turns a PGN-formatted chess game
 into a visual chessboard, with menus for navigation. It's designed to turn a
 MoinMoin wiki into a knowledge management system for your chess games.
 
-![example](https://raw.github.com/wwoast/moin-chess/master/tests/moin-chess.png)
+![example](https://raw.githubusercontent.com/wwoast/moin-chess/master/tests/moin-chess.png)
 ##### Moin-Chess running on MoinMoin 1.9 in a Linux browser
 
 Moin-Chess is released under the GPLv2 license or (at the user's option) any 
