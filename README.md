@@ -1,13 +1,25 @@
-# moin chess
+# moin-chess
 ### A Chess notation plugin for MoinMoin
 ##### Justin Cassidy, December 2014
 ##### Version 0.1.0
 
 
 ## About
-Moin Chess is a Wiki parser for MoinMoin that turns a PGN-formatted chess game
+Moin-Chess is a Wiki parser for MoinMoin that turns a PGN-formatted chess game
 into a visual chessboard, with menus for navigation. It's designed to turn a
 MoinMoin wiki into a knowledge management system for your chess games.
+
+![example](https://raw.github.com/wwoast/moin-chess/master/tests/moin-chess.png)
+##### Moin-Chess running on MoinMoin 1.9 in a Linux browser
+
+Moin-Chess is released under the GPLv2 license or (at the user's option) any 
+later version, the same as MoinMoin itself.
+
+
+## Features
+* Polished-looking chessboards in pure HTML
+ * Uses your native browser's font to display images
+* Menus and page layouts designed for paper-printing
 
 
 ## Usage
@@ -36,6 +48,11 @@ elsewhere in the wiki. New versions of Moin Chess may remove this limitation.
 
 
 ## Installation
+Moin-Chess is tested on Python 2.7 on Debian wheezy. It comes bundled with 
+zepto.js and requires MoinMoin libraries as well as python-chess.
+
+* Install python-chess (tested on 0.60 and later)
+ * `pip install python-chess` or `apt-get install python-chess`
 * Check out the source code from GitHub
 * Browse to the source code directory
 * Tarball the data and htdocs directories
@@ -44,7 +61,7 @@ elsewhere in the wiki. New versions of Moin Chess may remove this limitation.
 * Validate that the following files are owned by your webserver:
  * $MOIN/data/plugin/parser/Chess.py
  * $MOIN/htdocs/chess/*
-* Restart your WSGI/uwsgi environment
+* Restart MoinMoin's WSGI/uwsgi service
 
 
 ## Administration
