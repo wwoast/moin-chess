@@ -10,7 +10,6 @@ into a visual chessboard, with menus for navigation. It's designed to turn a
 MoinMoin wiki into a knowledge management system for your chess games.
 
 ![example](https://raw.githubusercontent.com/wwoast/moin-chess/master/tests/moin-chess.png)
-##### Moin-Chess running on MoinMoin 1.9 in a Linux browser
 
 Moin-Chess is released under the GPLv2 license or (at the user's option) any 
 later version, the same as MoinMoin itself.
@@ -32,8 +31,8 @@ create a "Chess Game" tag, with a unique "Game ID".
 
 
 To insert a board without menus that references an existing game, create a
-create a "Chess Board" tag. As long as the "Game ID" exists in the wiki as a
-"Chess Game" tag, and that game tag has been viewed at least once, it can be
+"Chess Board" tag. As long as the "Game ID" exists in the wiki as a "Chess 
+Game" tag, and that game tag has been viewed at least once, it can be
 referenced by a "Chess Board" tag. 
 
     {{{#!Chess Board Tournament-Round-1
