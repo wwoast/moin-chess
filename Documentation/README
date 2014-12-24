@@ -1,0 +1,51 @@
+moin chess -- A Chess notation plugin for MoinMoin
+Justin Cassidy, December 2014
+--------------------------------------------------
+
+== About ==
+Moin Chess is a Wiki parser for MoinMoin that turns a PGN-formatted chess game
+into a visual chessboard, with menus for navigation. It's designed to turn a
+MoinMoin wiki into a knowledge management system for your chess games.
+
+
+== Usage ==
+To insert a chess board, including a full menu for navigating through a game, 
+create a "Chess Game" tag, with a unique "Game ID".
+
+{{{#!Chess Game Tournament-Round-1
+PGN-or-FEN-moves
+}}}
+
+
+To insert a board without menus that references an existing game, create a
+create a "Chess Board" tag. As long as the "Game ID" exists in the wiki as a
+"Chess Game" tag, and that game tag has been viewed at least once, it can be
+referenced by a "Chess Board" tag. 
+
+{{{#!Chess Board Tournament-Round-1
+8-White
+}}}
+
+
+== Current Limitations ==
+To change the moves in a "Chess Game" tag, you currently need to change the
+"Game ID" you use. This is protection against a "Game ID" getting redefined
+elsewhere in the wiki. New versions of Moin Chess may remove this limitation.
+
+
+== Administration ==
+When a new "Chess Game" tag is parsed, it creates an entry in the MoinMoin
+cache, stored under $MOIN/data/cache/wikiconfig/chess. As long as this cache
+file exists, the contents of the Chess Game tag become "secondary" to the
+cached version.
+
+Server admins may delete these files, in case there are problems caused by
+cached chess games in the Wiki.
+
+
+== Upcoming Features ==
+Better menu notation for the game's end-state (draw/win/mate)
+Better board / move highlighting in the menus
+Game tags with a predefined starting position
+Fix caching behavior with respect to the first appearance of a Game tag
+
