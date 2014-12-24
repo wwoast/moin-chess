@@ -90,9 +90,8 @@ class Parser:
 
 	      # If the cache already exists, verify moves are the same.
 	      # If they're not the same, print an error message.
-	      # TODO: make sure this doesn't slow down page loading 
 	      if not ( self.equivalent_games() ):
-	         self.error = "Cache error: %s already exists. Choose a new Game ID." % self.name
+	         self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
 
 	      self.cache.close()
 
