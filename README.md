@@ -42,7 +42,7 @@ referenced by a "Chess Board" tag.
 ## Current Limitations
 To change the moves in a "Chess Game" tag, you currently need to change the
 "Game ID" you use. This is protection against a "Game ID" getting redefined
-elsewhere in the wiki. New versions of Moin Chess may remove this limitation.
+elsewhere in the wiki. New versions of Moin-Chess may remove this limitation.
 
 
 ## Installation
