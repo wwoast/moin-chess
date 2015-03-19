@@ -63,6 +63,10 @@ class Parser:
 	self.game = ""           # The chess.pgn game object
 	self.position = ""	 # Starting position to display
 
+	# Page name from the request object. May only change the chess game's
+	# contents from the original page it came from.
+	self.page_name = self.request.formatter.page.page_name
+
 	# Most arguments to a chess tag: 4 (mode, name, starting position, ??)
 	self.inputs = self.kw['format_args'].split(' ')[0:4]
 	if ( len(self.inputs) < 2 ):
