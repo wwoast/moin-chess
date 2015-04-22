@@ -65,7 +65,7 @@ class Parser:
 
 	# Page name from the request object. May only change the chess game's
 	# contents from the original page it came from.
-	self.page_name = self.request.formatter.page.page_name
+	self.view_page = self.request.formatter.page.page_name
 
 	# Most arguments to a chess tag: 4 (mode, name, starting position, ??)
 	self.inputs = self.kw['format_args'].split(' ')[0:4]
@@ -91,30 +91,21 @@ class Parser:
               self.cache.open(mode='r')
               vfh = StringIO(self.cache.read())
               self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
-
-	      # If the cache already exists, verify moves are the same.
+	      self.stored_page = vfh.split('\n')[1]
+	      # If the cache already exists, verify we're editing from the
+	      # same viewed page. Allow if we are.
+	      if ( self.stored_page == self.view_page ):
+	         self.write_game()
+	      # Otherwise, vet that the submitted moves are the same.
 	      # If they're not the same, print an error message.
-	      if not ( self.equivalent_games() ):
-	         self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
+	      else
+	         if not ( self.equivalent_games() ):
+	            self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
 
 	      self.cache.close()
 
-           except caching.CacheError as e:
-	      # Don't print errors when adding a new game
-	      # self.error = "Cache error: %s" % e
-
-	      # Game hasn't been defined yet. Write a PGN to the cache
-              # In a "Game" tag, other values are PGN moves. Space and new-line
-              # delimited moves to give to the PGN engine
-   	      moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
-              self.cache.open(mode='w')
-
-              vfh = StringIO(' '.join(moves))
-	      self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
-	      exporter = chess.pgn.StringExporter()
-	      self.game.export(exporter, headers=False)
-              moves = str(exporter)
-	      self.cache.write(moves)
+	   except caching.CacheError as e:
+	      self.write_game()
 
 	   except ValueError as e:
 	      # Error when importing the PGN moves from wiki {{{ }}} or a file
@@ -151,6 +142,26 @@ class Parser:
 
 	else:
 	   self.error = 'Tag error: Use {{{#!Chess Game}}} or {{{#!Chess Board}}}'	   
+
+
+    def write_game(self):
+        """Write a chess game to the MoinMoin cache"""
+	# In a "Game" tag, other values are PGN moves. Space and new-line
+	# delimited moves to give to the PGN engine
+	moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
+	self.cache.open(mode='w')
+
+	vfh = StringIO(' '.join(moves))
+	self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
+	exporter = chess.pgn.StringExporter()
+	self.game.export(exporter, headers=False)
+	moves = str(exporter)
+	self.cache.write(moves)
+	# Page name on 2nd line of cache file doesn't break the
+	# chess game-parser :) This is checked to be sure you don't
+	# change this game definition outside of the original wiki
+	# page it's defined for.
+	self.cache.write("\n" + self.view_page)
 
 
     def equivalent_games(self):
