@@ -149,20 +149,19 @@ $(function() {
       
       // If this is the first board drawn for a new game, make it displayable
       output[id] = e_board;
-
-      var id_split = link_id_names(id);     
-      if ( id_split[1] != game_name ) {
-         output[id].style.display = "table";
-         game_name = id_split[1];
-      }
    }
 
    // Now, replace ASCII boards with div-pretty polishboards
    for ( var i = 0; i < chessboards.length ; i++ ) {
       var id = chessboards[i].id;
       chessboards[i].innerHTML = output[id].innerHTML;
-      chessboards[i].style.display = output[id].style.display;
       chessboards[i].className = "polishboard";
+      // Every time we have a new game, print the first table
+      var id_split = link_id_names(id);     
+      if ( id_split[1] != game_name ) {
+         chessboards[id].style.display = "table";
+         game_name = id_split[1];
+      }
    }
 
    // And now that the boards are drawn, draw menus using the game
