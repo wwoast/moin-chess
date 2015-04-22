@@ -90,21 +90,22 @@ class Parser:
 	   try:
               self.cache.open(mode='r')
               vfh = StringIO(self.cache.read())
-              self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
-	      self.stored_page = vfh.getvalue().split("\n")[1]
+	      self.stored_page = vfh.getvalue().split("\n").pop()
 	      self.cache.close()
 
 	      # If the cache already exists, verify we're editing from the
 	      # same viewed page. Allow if we are.
 	      if ( self.stored_page == self.view_page ):
 	         self.write_game()
-	      else:
-	         self.error = "Cache error: %s already exists on [[ %s ]]. Choose a new Game ID." % ( self.name, self.stored_page )
 
 	      # Otherwise, vet that the submitted moves are the same.
 	      # If they're not the same, print an error message.
-	      if not ( self.equivalent_games() ):
-	         self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
+	      # elif not ( self.equivalent_games() ):
+	      #    self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
+
+	      # Moves are the same, but pages are different.
+	      else: 
+	         self.error = "Cache error: %s already exists on \"%s\". Choose a new Game ID." % ( self.name, self.stored_page )
 
 
 	   except caching.CacheError as e:
@@ -120,6 +121,7 @@ class Parser:
 
 	   finally:
 	      self.cache.close()
+
 
 	# Board tags: Just draw a single move from an existing game
 	elif ( self.mode == "Board" ):
@@ -171,7 +173,9 @@ class Parser:
 	"""Is the game in the wikicache the same as the one being defined?"""
    	moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
 	vfh = StringIO(' '.join(moves))
-	game_raw = chess.pgn.read_game(vfh)
+        cfh = StringIO(self.cache.read())
+	game_raw = chess.pgn.read_game(vfh)    # Moves on the page
+        self.game = chess.pgn.read_game(cfh)   # Moves from the cache
 
 	# Compare game_raw with self.game from the cache
 	export_cache = chess.pgn.StringExporter()
