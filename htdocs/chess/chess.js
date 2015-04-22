@@ -148,13 +148,13 @@ $(function() {
       }
       
       // If this is the first board drawn for a new game, make it displayable
+      output[id] = e_board;
+
       var id_split = link_id_names(id);     
       if ( id_split[1] != game_name ) {
-         e_board.style.display = "table";
+         output[id].style.display = "table";
          game_name = id_split[1];
       }
-
-      output[id] = e_board;
    }
 
    // Now, replace ASCII boards with div-pretty polishboards
