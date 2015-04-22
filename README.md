@@ -39,12 +39,6 @@ referenced by a "Chess Board" tag.
     }}}
 
 
-## Current Limitations
-To change the moves in a "Chess Game" tag, you currently need to change the
-"Game ID" you use. This is protection against a "Game ID" getting redefined
-elsewhere in the wiki. New versions of Moin-Chess may remove this limitation.
-
-
 ## Installation
 Moin-Chess is tested on Python 2.7 on Debian wheezy. It comes bundled with 
 `zepto.js` and requires MoinMoin libraries as well as `python-chess`.
@@ -78,8 +72,13 @@ will recreate the game's Wiki cache entry.
 * Better menu notation for the game's end-state (draw/win/mate)
 * Better board / move highlighting in the menus
 * Game tags with a predefined starting position
-* Fix caching behavior with respect to the first appearance of a Game tag
 
 
 ## Changelog
+#### 0.1.5 - Caching and Bugfixes
+* Fixed div closure issues
+* Fixed issues where Zepto wouldn't guaranteeably show the chessboards
+* Allow edits to a chessboard on a single wiki page
+ * Caches the name of the wiki page where a chess game appears
+
 #### 0.1.0 - Initial Release
