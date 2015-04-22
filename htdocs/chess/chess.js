@@ -159,7 +159,7 @@ $(function() {
       // Every time we have a new game, print the first table
       var id_split = link_id_names(id);     
       if ( id_split[1] != game_name ) {
-         chessboards[id].style.display = "table";
+         chessboards[i].style.display = "table";
          game_name = id_split[1];
       }
    }
