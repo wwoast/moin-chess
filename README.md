@@ -54,6 +54,8 @@ Moin-Chess is tested on Python 2.7 on Debian wheezy. It comes bundled with
  * `$MOIN/data/plugin/parser/Chess.py`
  * `$MOIN/htdocs/chess/*`
 * Restart MoinMoin's WSGI/uwsgi service
+* If upgrading from 0.1.0, you'll need to regenerate your MoinMoin cache
+ * Remove your data/cache/wikiconfig/chess/* files
 
 
 ## Administration
