@@ -1,6 +1,6 @@
 # moin-chess
 ### A Chess notation plugin for MoinMoin
-##### Justin Cassidy, December 2014
+##### Justin Cassidy, April 2015
 
 
 ## About
