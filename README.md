@@ -40,8 +40,8 @@ referenced by a "Chess Board" tag.
 
 
 ## Installation
-Moin-Chess is tested on Python 2.7 on Debian wheezy. It comes bundled with 
-`zepto.js` and requires MoinMoin libraries as well as `python-chess`.
+Moin-Chess is tested on Python 2.7 on Debian Wheezy and Jessie. It comes 
+bundled with `zepto.js` and requires `MoinMoin` and `python-chess`.
 
 * Install python-chess (tested on 0.60 and later)
  * `pip install python-chess` or `apt-get install python-chess`
