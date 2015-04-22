@@ -91,18 +91,20 @@ class Parser:
               self.cache.open(mode='r')
               vfh = StringIO(self.cache.read())
               self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
-	      self.stored_page = vfh.getvalue().split('|n')[1]
+	      self.stored_page = vfh.getvalue().split("\n")[1]
+	      self.cache.close()
+
 	      # If the cache already exists, verify we're editing from the
 	      # same viewed page. Allow if we are.
 	      if ( self.stored_page == self.view_page ):
 	         self.write_game()
+
 	      # Otherwise, vet that the submitted moves are the same.
 	      # If they're not the same, print an error message.
 	      else:
 	         if not ( self.equivalent_games() ):
 	            self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
 
-	      self.cache.close()
 
 	   except caching.CacheError as e:
 	      self.write_game()
