@@ -98,12 +98,13 @@ class Parser:
 	      # same viewed page. Allow if we are.
 	      if ( self.stored_page == self.view_page ):
 	         self.write_game()
+	      else:
+	         self.error = "Cache error: %s already exists on [[ %s ]]. Choose a new Game ID." % ( self.game, self.stored_page )
 
 	      # Otherwise, vet that the submitted moves are the same.
 	      # If they're not the same, print an error message.
-	      else:
-	         if not ( self.equivalent_games() ):
-	            self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
+	      if not ( self.equivalent_games() ):
+	         self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
 
 
 	   except caching.CacheError as e:
