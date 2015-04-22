@@ -124,7 +124,7 @@ function create_menu_listeners() {
 }
 
 
-$(function() {
+Zepto(function($) {
    var chessboards = document.body.querySelectorAll('.chessboard');
    var output = new Object;
    var game_name = "";
