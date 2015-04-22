@@ -241,7 +241,7 @@ class Parser:
 	      self.request.write(formatter.rawHTML(move_link))
 	      self.request.write(formatter.rawHTML('</li>'))
 
-	self.request.write(formatter.rawHTML('</ol></div>'))
+	self.request.write(formatter.rawHTML('</ol></div></div>'))
 
 
     def draw_board(self, formatter):
