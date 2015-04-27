@@ -223,11 +223,12 @@ function update_focal_move(game_name, to_id, state) {
 
    var focal_white = document.getElementById(game_name + "_white");
    var focal_black = document.getElementById(game_name + "_black");
+   var focal_state = document.getElementById(game_name + "_state");
 
    // Board link states point at the next person's turn, so the white move
    // is the black turn pointer's link text, and vice versa
-   var white_move = recover_state("ch_m", game_name, white_turn, "w");
-   var black_move = recover_state("ch_m", game_name, black_turn, "b");
+   var white_move = recover_state("ch_m", game_name, black_turn, "b");
+   var black_move = recover_state("ch_m", game_name, white_turn, "w");
    var white_text = "&mdash;";
    var black_text = "&mdash;";
    // First move is dash-dash unless non-null
@@ -241,6 +242,7 @@ function update_focal_move(game_name, to_id, state) {
 
    focal_white.innerHTML = white_text;
    focal_black.innerHTML = black_text;
+   focal_state.innerHTML = state;
 }
 
 
