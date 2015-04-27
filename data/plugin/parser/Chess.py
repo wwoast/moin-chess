@@ -94,8 +94,11 @@ class Parser:
 	      self.cache.close()
 
 	      # If the cache already exists, verify we're editing from the
-	      # same viewed page. Allow if we are.
-	      if ( self.stored_page == self.view_page ):
+	      # same viewed page. Allow if we are. The NULL case accounts for
+	      # chess caches not getting updated after failed moves, or for
+	      # old game formats that don't have the stored_page reference on
+	      # the second line of the cache file.
+	      if ( self.stored_page == self.view_page ) or ( self.stored_page == '' ):
 	         self.write_game()
 
 	      # Otherwise, vet that the submitted moves are the same.
