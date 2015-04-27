@@ -75,11 +75,12 @@ function link_id_names(lid) {
    // all of the relevant values that will match board/link ids.
    var tmp = lid.split("|");
    var type = tmp.shift(1);
+   var state = tmp.pop();
    tmp = tmp.join("|").split("_");
    var turn = tmp.pop();
    var game_name = tmp.join("_");
    var game_move = game_name + "_" + turn;  
-   return [ type, game_name, game_move ];
+   return [ type, game_name, game_move, state ];
 }
 
 
@@ -107,17 +108,18 @@ function create_menu_listeners() {
          var id_splits = link_id_names(link_id);
          var game_name = id_splits[1];
          var game_move = id_splits[2];
+         var game_state = id_splits[3];
          if ( id_splits[0] == "ch_m" ) {
             // This is a chess move link
-            create_listener(links[i], switch_board, game_name, game_move);
+            create_listener(links[i], switch_board, game_name, game_move, game_state);
          }
          if ( id_splits[0] == "ch_pm" ) {
             // This is a previous move link
-            create_listener(links[i], adjacent_board, game_name, "previous");
+            create_listener(links[i], adjacent_board, game_name, "previous", game_state);
          }
          if ( id_splits[0] == "ch_nm" ) {
             // This is a next move link
-            create_listener(links[i], adjacent_board, game_name, "next");
+            create_listener(links[i], adjacent_board, game_name, "next", game_state);
          }
       }
    }
@@ -183,8 +185,9 @@ function current_board(game_name) {
 }
 
 
-function update_focal_move(game_name, to_id) {
-   // Update the focal move text. TODO: make clickable
+function update_focal_move(game_name, to_id, state) {
+   // Update the focal move text, including current move state. 
+   // TODO: make clickable
    var move = to_id.split("_").pop();
    var color = move.split('').pop();
    var move_n = Number(move.replace(color, ''));
@@ -198,8 +201,8 @@ function update_focal_move(game_name, to_id) {
       black_turn = black_turn - 1;
    }
 
-   var white = game_name + "_" + white_turn + "w";
-   var black = game_name + "_" + black_turn + "b";
+   var white = game_name + "_" + white_turn + "w" + "|" + state;
+   var black = game_name + "_" + black_turn + "b" + "|" + state;
 
    var focal_white = document.getElementById(game_name + "_white");
    var focal_black = document.getElementById(game_name + "_black");
@@ -224,19 +227,19 @@ function update_focal_move(game_name, to_id) {
 }
 
 
-function switch_board(game_name, to_id) {
+function switch_board(game_name, to_id, state) {
    // Used for the individual chess moves, to allow the board to be changed
    var this_board = current_board(game_name);
-   var new_board = document.getElementById("ch_b|" + to_id);
+   var new_board = document.getElementById("ch_b|" + to_id + "|" + state);
 
    this_board.style.display = "none";
    new_board.style.display = "table";
 
-   update_focal_move(game_name, to_id); 
+   update_focal_move(game_name, to_id, state); 
 }
 
 
-function adjacent_board(game_name, direction) {
+function adjacent_board(game_name, direction, state) {
    var this_board = current_board(game_name);
    var id_split = link_id_names(this_board.id);
 
@@ -271,11 +274,11 @@ function adjacent_board(game_name, direction) {
    if ( direction == "previous" && previous_board != "" ) {
       this_board.style.display = "none";
       previous_board.style.display = "table";
-      update_focal_move(game_name, prev_split[2]); 
+      update_focal_move(game_name, prev_split[2], state); 
    }
    if ( direction == "next" && next_board != "" ) {
       this_board.style.display = "none";
       next_board.style.display = "table";
-      update_focal_move(game_name, next_split[2]); 
+      update_focal_move(game_name, next_split[2], state); 
    }
 }

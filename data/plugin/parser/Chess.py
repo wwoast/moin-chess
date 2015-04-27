@@ -62,6 +62,7 @@ class Parser:
 	self.error = ""          # Error message to print if necessary        
 	self.game = ""           # The chess.pgn game object
 	self.position = ""	 # Starting position to display
+	self.state = []		 # Array of move states (i.e. check, mate, draw)
 
 	# Page name from the request object. May only change the chess game's
 	# contents from the original page it came from.
@@ -222,6 +223,21 @@ class Parser:
 	node = self.game
 	while node.variations:
 	   next_node = node.variation(0)
+
+	   # Read the game states in here (check/draw/mate)
+	   if ( node.is_game_over() ):
+	      if ( node.is_stalemate() ):
+	         self.state.append('stalemate')
+	      elif ( node.is_checkmate() ):
+	         self.state.append('checkmate')
+	      else:
+	         pass	# TODO: Headers should show whether draw or forefit
+	   # Mate is check as well, so verify check afterwards
+	   elif ( node.is_check() ):
+	      self.state.append('check')
+	   else:
+	      self.state.append('')   # Make the state array as long as the moves array
+
 	   moves.append(node.board().san(next_node.move))
            node = next_node
 
@@ -231,14 +247,14 @@ class Parser:
 	for i, move in enumerate(moves):
 	   if ( i % 2 == 0 ):
 	      self.request.write(formatter.rawHTML('<li>'))
-	      board_switch = self.name + "_" + str(turn) + "b"
+	      board_switch = self.name + "_" + str(turn) + "b" + "|" + self.state[i]
 	      move_link = '<p class="moveitem" id="ch_m|' + board_switch + '">' + move + '</p> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
 
 	   else:
-	      board_switch = self.name + "_" + str(turn+1) + "w"
+	      board_switch = self.name + "_" + str(turn+1) + "w" + "|" + self.state[i]
 	      move_link = '<p class="moveitem" id="ch_m|' + board_switch + '">' + move + '</p>'
 	      turn = turn + 1
 	      self.request.write(formatter.rawHTML(move_link))
@@ -261,13 +277,13 @@ class Parser:
 	   if ( i % 2 == 0 ):   # White to move
 	      turn = turn + 1
 	      if ( turn == int(show_turn)) and ( to_move == "White" ):
-	         board_id = self.name + "_" + str(turn) + "w"
+	         board_id = self.name + "_" + str(turn) + "w" + "|" + self.state[i]
 	         board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 	         break
 
 	   else:                # Black to move
 	      if ( turn == int(show_turn)) and ( to_move == "Black" ):
-	         board_id = self.name + "_" + str(turn) + "b"
+	         board_id = self.name + "_" + str(turn) + "b" + "|" + self.state[i]
 	         board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 	         break
 
@@ -275,7 +291,7 @@ class Parser:
 
 	# Last board b/c the variations loop misses it
 	if ( turn == int(show_turn)):
-	   board_id = self.name + "_" + str(turn) + "w"
+	   board_id = self.name + "_" + str(turn) + "w" + "|" + self.state[i]
 	   board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 
 	self.request.write(formatter.rawHTML(board_html))
