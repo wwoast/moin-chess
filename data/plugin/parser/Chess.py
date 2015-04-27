@@ -154,10 +154,10 @@ class Parser:
 	# In a "Game" tag, other values are PGN moves. Space and new-line
 	# delimited moves to give to the PGN engine
 	moves = self.raw.replace('\n', ' ').split(' ')[0:MAX_PLAYS]
-	self.cache.open(mode='w')
-
 	vfh = StringIO(' '.join(moves))
 	self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
+
+	self.cache.open(mode='w')   # If the moves were legit, write file
 	exporter = chess.pgn.StringExporter()
 	self.game.export(exporter, headers=False)
 	moves = str(exporter)
