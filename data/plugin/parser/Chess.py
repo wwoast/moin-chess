@@ -63,6 +63,7 @@ class Parser:
 	self.game = ""           # The chess.pgn game object
 	self.position = ""	 # Starting position to display
 	self.state = []		 # Array of move states (i.e. check, mate, draw)
+				 # Start w/one empty value for the first move (TODO??)
 
 	# Page name from the request object. May only change the chess game's
 	# contents from the original page it came from.
@@ -247,14 +248,14 @@ class Parser:
 	for i, move in enumerate(moves):
 	   if ( i % 2 == 0 ):
 	      self.request.write(formatter.rawHTML('<li>'))
-	      board_switch = self.name + "_" + str(turn) + "b" + "|" + self.state[i]
+	      board_switch = self.name + "_" + str(turn) + "b" + "|" + self.state[i+1]
 	      move_link = '<p class="moveitem" id="ch_m|' + board_switch + '">' + move + '</p> &nbsp;'
 	      self.request.write(formatter.rawHTML(move_link))
 	      if ( i + 1 == len(moves)):   # White move ends game
 	         self.request.write(formatter.rawHTML('</li>'))
 
 	   else:
-	      board_switch = self.name + "_" + str(turn+1) + "w" + "|" + self.state[i]
+	      board_switch = self.name + "_" + str(turn+1) + "w" + "|" + self.state[i+1]
 	      move_link = '<p class="moveitem" id="ch_m|' + board_switch + '">' + move + '</p>'
 	      turn = turn + 1
 	      self.request.write(formatter.rawHTML(move_link))
