@@ -307,12 +307,12 @@ class Parser:
         while node.variations:
            next_node = node.variation(0)
 	   # Read the game states in here (check/draw/mate)
-	   read_game_state(node)
+	   self.read_game_state(node)
            boards.append(unicode(node.board()))
            node = next_node
 
 	# Last board at the end of the variations list
-	read_game_state(node)
+	self.read_game_state(node)
         boards.append(unicode(node.board()))
 
 	# And draw all boards
