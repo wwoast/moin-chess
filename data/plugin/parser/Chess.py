@@ -225,15 +225,15 @@ class Parser:
 	   next_node = node.variation(0)
 
 	   # Read the game states in here (check/draw/mate)
-	   if ( node.is_game_over() ):
-	      if ( node.is_stalemate() ):
+	   if ( node.board().is_game_over() ):
+	      if ( node.board().is_stalemate() ):
 	         self.state.append('stalemate')
-	      elif ( node.is_checkmate() ):
+	      elif ( node.board().is_checkmate() ):
 	         self.state.append('checkmate')
 	      else:
 	         pass	# TODO: Headers should show whether draw or forefit
 	   # Mate is check as well, so verify check afterwards
-	   elif ( node.is_check() ):
+	   elif ( node.board().is_check() ):
 	      self.state.append('check')
 	   else:
 	      self.state.append('')   # Make the state array as long as the moves array
@@ -277,13 +277,13 @@ class Parser:
 	   if ( i % 2 == 0 ):   # White to move
 	      turn = turn + 1
 	      if ( turn == int(show_turn)) and ( to_move == "White" ):
-	         board_id = self.name + "_" + str(turn) + "w" + "|" + self.state[i]
+	         board_id = self.name + "_" + str(turn) + "w"
 	         board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 	         break
 
 	   else:                # Black to move
 	      if ( turn == int(show_turn)) and ( to_move == "Black" ):
-	         board_id = self.name + "_" + str(turn) + "b" + "|" + self.state[i]
+	         board_id = self.name + "_" + str(turn) + "b"
 	         board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 	         break
 
@@ -291,7 +291,7 @@ class Parser:
 
 	# Last board b/c the variations loop misses it
 	if ( turn == int(show_turn)):
-	   board_id = self.name + "_" + str(turn) + "w" + "|" + self.state[i]
+	   board_id = self.name + "_" + str(turn) + "w"
 	   board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + unicode(node.board()) + "\n" + '</pre></div>'
 
 	self.request.write(formatter.rawHTML(board_html))
