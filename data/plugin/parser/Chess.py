@@ -131,7 +131,12 @@ class Parser:
               self.game = chess.pgn.read_game(vfh)   # Are the moves sensible?
 
 	      self.position = self.raw
-	      # TODO: Sanitization
+	      try:
+	         [ tmove, tcolor ] = self.position.split("-")
+	         if not (( tmove.isdigit()) and ( color.lower == "black" or color.lower == "white" )):
+	            self.error = "Tag error: make your position string number dash color (like \"3-White\")."
+	      except:
+	         self.error = "Tag error: position strings should be dash delimited (like \"4-Black\")."
 
            except caching.CacheError as e:
 	      # Game hasn't been defined yet. For board references, print err
