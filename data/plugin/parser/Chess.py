@@ -133,7 +133,7 @@ class Parser:
 	      self.position = self.raw
 	      try:
 	         [ tmove, tcolor ] = self.position.split("-")
-	         if not (( tmove.isdigit()) and ( tcolor.lower == "black" or tcolor.lower == "white" )):
+	         if not (( tmove.isdigit()) and ( tcolor.lower() == "black" or tcolor.lower() == "white" )):
 	            self.error = "Tag error: make your position string number dash color (like \"3-White\")."
 	      except:
 	         self.error = "Tag error: position strings should be dash delimited (like \"4-Black\")."
