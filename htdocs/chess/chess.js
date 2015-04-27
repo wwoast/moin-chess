@@ -185,10 +185,25 @@ function current_board(game_name) {
 }
 
 
+// Having "state" in the id was a bad idea, but how else to comm from the server w/o AJAX/JSON?
+function recover_state(linktype, game_name, turn, color) {
+   e = document.getElementById(linktype + "|" + game_name + "_" + turn + color + "|" );
+   if ( e == null ) {
+      e = document.getElementById(linktype + "|" + game_name + "_" + turn + color + "|" + "check");
+      if ( e == null ) {
+         e = document.getElementById(linktype + "|" + game_name + "_" + turn + color + "|" + "checkmate");
+         if ( e == null ) {
+            e = document.getElementById(linktype + "|" + game_name + "_" + turn + color + "|" + "stalemate");
+         }
+      }
+   }
+   return e;
+}
+
+
 function update_focal_move(game_name, to_id, state) {
    // Update the focal move text, including current move state. 
    // TODO: make clickable
-   // URG: must have previous and next move state, not this move's state!
    var move = to_id.split("_").pop();
    var color = move.split('').pop();
    var move_n = Number(move.replace(color, ''));
@@ -202,16 +217,17 @@ function update_focal_move(game_name, to_id, state) {
       black_turn = black_turn - 1;
    }
 
-   var white = game_name + "_" + white_turn + "w" + "|" + state;
-   var black = game_name + "_" + black_turn + "b" + "|" + state;
+   // URG: must have previous and next move state, not this move's state or a single state!
+   var white = game_name + "_" + white_turn + "w";
+   var black = game_name + "_" + black_turn + "b";
 
    var focal_white = document.getElementById(game_name + "_white");
    var focal_black = document.getElementById(game_name + "_black");
 
    // Board link states point at the next person's turn, so the white move
    // is the black turn pointer's link text, and vice versa
-   var white_move = document.getElementById("ch_m|" + black);
-   var black_move = document.getElementById("ch_m|" + white);
+   var white_move = recover_state("ch_m", game_name, white_turn, "w");
+   var black_move = recover_state("ch_m", game_name, black_turn, "b");
    var white_text = "&mdash;";
    var black_text = "&mdash;";
    // First move is dash-dash unless non-null
