@@ -293,11 +293,11 @@ function adjacent_board(game_name, direction, state) {
    if ( direction == "previous" && previous_board != "" ) {
       this_board.style.display = "none";
       previous_board.style.display = "table";
-      update_focal_move(game_name, prev_split[2], state); 
+      update_focal_move(game_name, prev_split[2], prev_split[3]); 
    }
    if ( direction == "next" && next_board != "" ) {
       this_board.style.display = "none";
       next_board.style.display = "table";
-      update_focal_move(game_name, next_split[2], state); 
+      update_focal_move(game_name, next_split[2], next_split[3]); 
    }
 }
