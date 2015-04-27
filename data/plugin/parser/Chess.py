@@ -219,19 +219,6 @@ class Parser:
 	while node.variations:
 	   next_node = node.variation(0)
 
-	   # Read the game states in here (check/draw/mate)
-	   if ( node.board().is_game_over() ):
-	      if ( node.board().is_stalemate() ):
-	         self.state.append('stalemate')
-	      elif ( node.board().is_checkmate() ):
-	         self.state.append('checkmate')
-	      else:
-	         pass	# TODO: Headers should show whether draw or forefit
-	   # Mate is check as well, so verify check afterwards
-	   elif ( node.board().is_check() ):
-	      self.state.append('check')
-	   else:
-	      self.state.append('')   # Make the state array as long as the moves array
 
 	   moves.append(node.board().san(next_node.move))
            node = next_node
@@ -301,8 +288,24 @@ class Parser:
 	node = self.game
         while node.variations:
            next_node = node.variation(0)
+	   
+	   # Read the game states in here (check/draw/mate)
+	   if ( node.board().is_game_over() ):
+	      if ( node.board().is_stalemate() ):
+	         self.state.append('stalemate')
+	      elif ( node.board().is_checkmate() ):
+	         self.state.append('checkmate')
+	      else:
+	         pass	# TODO: Headers should show whether draw or forefit
+	   # Mate is check as well, so verify check afterwards
+	   elif ( node.board().is_check() ):
+	      self.state.append('check')
+	   else:
+	      self.state.append('')   # Make the state array as long as the moves array
+
            boards.append(unicode(node.board()))
            node = next_node
+
 	# Last board at the end of the variations list
         boards.append(unicode(node.board()))
 
@@ -310,9 +313,9 @@ class Parser:
 	turn = 1
 	for i, board in enumerate(boards):
 	   if ( i % 2 == 0 ):   # A board representing a white move
-	      board_id = self.name + "_" + str(turn) + "w"
+	      board_id = self.name + "_" + str(turn) + "w" + "|" + self.state[i]
 	   else:   # A board representing black moves
-	      board_id = self.name + "_" + str(turn) + "b"
+	      board_id = self.name + "_" + str(turn) + "b" + "|" + self.state[i]
 	      turn = turn + 1
 	   board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + board + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
