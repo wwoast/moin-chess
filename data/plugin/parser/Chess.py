@@ -226,9 +226,9 @@ class Parser:
 	DIV with individual moves that are clickable to be shown on the board,
 	in addition to the next and previous buttons."""
 	# Write the game move select menu first. Like all link ids, have a 
-	# pipe-delimited head, and an underscore-delimited foot, for js 
-	# parsing consistency
-	menu = '<div class="movemenu"><a class="moveitem" id="ch_pm|' + self.name + '_" href="#jslink">Previous</a> | <a class="moveitem" id="ch_nm|' + self.name + '_" href="#jslink">Next</a> &nbsp;&nbsp;&nbsp;<p class="focalwhite" id="' + self.name + '_white">&mdash;</p> <p class="focalblack" id="' + self.name + '_black">&mdash;</p>'
+	# pipe-delimited head, and an underscore-delimited center, and  
+	# a pipe-delimited foot, for js parsing consistency
+	menu = '<div class="movemenu"><a class="moveitem" id="ch_pm|' + self.name + '_0w|" href="#jslink">Previous</a> | <a class="moveitem" id="ch_nm|' + self.name + '_0w|" href="#jslink">Next</a> &nbsp;&nbsp;&nbsp;<p class="focalwhite" id="' + self.name + '_white">&mdash;</p> <p class="focalblack" id="' + self.name + '_black">&mdash;</p>'
 	self.request.write(formatter.rawHTML(menu))
 
 	# Take self.game and loop through the different moves. Reconstruct 

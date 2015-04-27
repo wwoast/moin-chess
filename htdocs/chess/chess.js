@@ -188,6 +188,7 @@ function current_board(game_name) {
 function update_focal_move(game_name, to_id, state) {
    // Update the focal move text, including current move state. 
    // TODO: make clickable
+   // URG: must have previous and next move state, not this move's state!
    var move = to_id.split("_").pop();
    var color = move.split('').pop();
    var move_n = Number(move.replace(color, ''));
