@@ -84,13 +84,13 @@ function link_id_names(lid) {
 }
 
 
-function create_listener(link, callback, game_name, game_move) {
+function create_listener(link, callback, game_name, game_move, game_state) {
    // For scoping functions (closures), the addEventListeners must
    // be inside a scope outside the create_menu_listeners loop.
    // Otherwise the environment of the event callbacks is equivalent
    // to the last iteration of the loop. It's super annoying!
    link.addEventListener('click', function() {
-      callback(game_name, game_move)});
+      callback(game_name, game_move, game_state)});
 }
 
 
