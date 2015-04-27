@@ -102,11 +102,6 @@ class Parser:
 	      if ( self.stored_page == self.view_page ) or ( self.stored_page == '' ):
 	         self.write_game()
 
-	      # Otherwise, vet that the submitted moves are the same.
-	      # If they're not the same, print an error message.
-	      # elif not ( self.equivalent_games() ):
-	      #    self.error = "Cache error: %s exists with different moves. Choose a new Game ID." % self.name
-
 	      # Moves are the same, but pages are different.
 	      else: 
 	         self.error = "Cache error: %s already exists on \"%s\". Choose a new Game ID." % ( self.name, self.stored_page )
