@@ -191,6 +191,26 @@ class Parser:
 	   return False	
 
 
+    def read_game_state(self, node):
+	"""Given a node in a variations list, see whether we are in check,
+	or possibly a game-terminating condition."""
+	board = node.board()
+
+	if ( board.is_game_over() ):
+	   if ( board.is_stalemate() ):
+	      self.state.append('stalemate')
+	   elif ( board.is_checkmate() ):
+	      self.state.append('checkmate')
+	   else:
+	      pass	# TODO: Headers should show whether draw or forefit
+
+	# Mate is check as well, so verify check afterwards
+	elif ( board.is_check() ):
+	   self.state.append('check')
+	else:
+	   self.state.append('')   # Make the state array as long as the moves array
+
+
     def sanitize_filename(self, filename):
 	"""Given basic ASCII characters, remove any characters we don't want
 	in a cachefile. Basically, permit digits, and a handful of symbols"""
@@ -218,8 +238,6 @@ class Parser:
 	node = self.game
 	while node.variations:
 	   next_node = node.variation(0)
-
-
 	   moves.append(node.board().san(next_node.move))
            node = next_node
 
@@ -288,25 +306,13 @@ class Parser:
 	node = self.game
         while node.variations:
            next_node = node.variation(0)
-	   
 	   # Read the game states in here (check/draw/mate)
-	   if ( node.board().is_game_over() ):
-	      if ( node.board().is_stalemate() ):
-	         self.state.append('stalemate')
-	      elif ( node.board().is_checkmate() ):
-	         self.state.append('checkmate')
-	      else:
-	         pass	# TODO: Headers should show whether draw or forefit
-	   # Mate is check as well, so verify check afterwards
-	   elif ( node.board().is_check() ):
-	      self.state.append('check')
-	   else:
-	      self.state.append('')   # Make the state array as long as the moves array
-
+	   read_game_state(node)
            boards.append(unicode(node.board()))
            node = next_node
 
 	# Last board at the end of the variations list
+	read_game_state(node)
         boards.append(unicode(node.board()))
 
 	# And draw all boards
