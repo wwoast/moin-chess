@@ -79,7 +79,7 @@ will recreate the game's Wiki cache entry.
 ## Changelog
 #### 0.2.0 - Game state notifications
 * Added check/checkmate/stalemate detection and reporting
-* Fixed game updating on a single page
+* Fixed game updating on a single page when a move was invalid
 
 #### 0.1.5 - Caching and Bugfixes
 * Fixed div closure issues
