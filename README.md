@@ -71,7 +71,7 @@ will recreate the game's Wiki cache entry.
 
 ## Upcoming Features
 * Use standard MoinMoin plugin installer
-* Better menu notation for the game's end-state (draw/win/mate)
+* Better menu notation for drawn games in the game's end-state
 * Better board / move highlighting in the menus
 * Game tags with a predefined starting position
 
