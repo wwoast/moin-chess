@@ -77,6 +77,10 @@ will recreate the game's Wiki cache entry.
 
 
 ## Changelog
+#### 0.2.0 - Game state notifications
+* Added check/checkmate/stalemate detection and reporting
+* Fixed game updating on a single page
+
 #### 0.1.5 - Caching and Bugfixes
 * Fixed div closure issues
 * Fixed issues where Zepto wouldn't guaranteeably show the chessboards
