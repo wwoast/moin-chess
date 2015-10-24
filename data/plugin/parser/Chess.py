@@ -329,7 +329,7 @@ class Parser:
 	   else:   # A board representing black moves
 	      board_id = self.name + "_" + str(turn) + "b" + "|" + self.state[i]
 	      turn = turn + 1
-	   board_html = '<div class="chessboard" id="ch_b|' + board_id + '"><pre class="chess_plain">' + "\n" + board + "\n" + '</pre></div>'
+	   board_html = '<div class="chessboard" id="ch_g|' + board_id + '"><pre class="chess_plain">' + "\n" + board + "\n" + '</pre></div>'
 	   self.request.write(formatter.rawHTML(board_html))
 
 

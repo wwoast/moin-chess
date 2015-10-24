@@ -249,7 +249,7 @@ function update_focal_move(game_name, to_id, state) {
 function switch_board(game_name, to_id, state) {
    // Used for the individual chess moves, to allow the board to be changed
    var this_board = current_board(game_name);
-   var new_board = document.getElementById("ch_b|" + to_id + "|" + state);
+   var new_board = document.getElementById("ch_g|" + to_id + "|" + state);
 
    this_board.style.display = "none";
    new_board.style.display = "table";
