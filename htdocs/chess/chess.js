@@ -164,6 +164,10 @@ Zepto(function($) {
          chessboards[i].style.display = "table";
          game_name = id_split[1];
       }
+      if ( id.indexOf("ch_b|") == 0 ) {
+         chessboards[i].style.display = "table";
+         game_name = id_split[1];
+      }
    }
 
    // And now that the boards are drawn, draw menus using the game
@@ -177,7 +181,8 @@ function current_board(game_name) {
    var chessboards = document.querySelectorAll(".polishboard");
    for ( var i = 0 ; i < chessboards.length; i++ ) {
       var board = chessboards[i];
-      if ( board.id.indexOf(game_name) >= 0 && 
+      if ( board.id.indexOf("ch_g|") == 0 && 
+           board.id.indexOf(game_name) >= 0 && 
            board.style.display == "table" ) {
          return board;
       }
